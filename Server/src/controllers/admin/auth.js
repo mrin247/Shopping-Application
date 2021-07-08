@@ -1,8 +1,13 @@
 // Import models
 const User = require('../../models/user');
 const jwt = require('jsonwebtoken');
+const {validationResult} = require('express-validator');
 
 exports.postSignup = (req,res,next)=>{
+
+    const errors = validationResult(req);
+    return res.status(400).json({errors: errors.array()});
+    
     User.findOne({email: req.body.email}).exec((err,user)=>{
         if(user) return res.status(400).json({
             message: "Admin is already registered"
