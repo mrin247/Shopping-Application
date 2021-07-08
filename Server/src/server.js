@@ -9,7 +9,8 @@ env.config()
 
 
 //  Import internal dependencies
-const userRoute = require('./routes/user');
+const authRoute = require('./routes/auth');
+const adminRoute = require('./routes/admin/auth');
 
 
 // MongoDb Connection
@@ -21,7 +22,9 @@ mongoose.connect(
         useCreateIndex: true
     }
 ).then(()=>{
-    console.log("Database is connected");
+    console.log(`
+    Database is connected
+*************************************`);
 });
 
 //  Use dependencies
@@ -29,7 +32,10 @@ const app=express();
 
 //  Middlewares
 app.use(bodyParser());
-app.use("/api",userRoute);
+
+
+app.use("/api",authRoute);
+app.use("/api",adminRoute);
 
 
 //  API ==>GET requests
@@ -41,5 +47,6 @@ app.use("/api",userRoute);
 
 //  satrt server
 app.listen(process.env.PORT,()=>{
-    console.log(`Server is running on port ${process.env.PORT}`);
+    console.log(`*************************************
+    Server is running on port ${process.env.PORT}`);
 })
