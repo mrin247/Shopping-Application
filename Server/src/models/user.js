@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const {Schema} = mongoose;
 
-//Create user schema
+// ! Create user schema
 const userSchema= new Schema({
     firstName:{
         type: String,
@@ -47,7 +47,7 @@ const userSchema= new Schema({
 },{timestamps:true});
 
 
-// userSchema methods
+// ! userSchema methods
 userSchema.virtual('password').set(function(password){
     this.hash_password= bcrypt.hashSync(password,10);
 });
@@ -62,5 +62,5 @@ userSchema.methods= {
     }
 };
 
-// exports userSchema as User model
+// ! exports userSchema as User model
 module.exports = mongoose.model('User', userSchema);

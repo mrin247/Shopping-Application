@@ -1,19 +1,20 @@
-//  Install dependecies
+//  ! Install Dependecies
 const express = require('express');
 const env = require('dotenv');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-//  Configure environment variables
+//  ! Configure environment variables
 env.config()
 
 
-//  Import internal dependencies
+//  ! Import Routes
 const authRoute = require('./routes/auth');
 const adminRoute = require('./routes/admin/auth');
+const categoryRoutes = require('./routes/category');
 
 
-// MongoDb Connection
+// ! MongoDb Connection
 mongoose.connect(
     `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.pwkc0.mongodb.net/${process.env.MONGO_DB_DBNAME}?retryWrites=true&w=majority`, 
     {
@@ -27,25 +28,20 @@ mongoose.connect(
 *************************************`);
 });
 
-//  Use dependencies
+//  ! Use dependencies
 const app=express();
 
-//  Middlewares
+//  ! Middlewares
 app.use(bodyParser());
 
-
+// ! Middleware routes
 app.use("/api",authRoute);
 app.use("/api",adminRoute);
-
-
-//  API ==>GET requests
-
-
-//  API <== POST requests
+app.use("/api", categoryRoutes);
 
 
 
-//  satrt server
+//  ! Satrt Server
 app.listen(process.env.PORT,()=>{
     console.log(`*************************************
     Server is running on port ${process.env.PORT}`);
