@@ -12,6 +12,7 @@ env.config()
 const authRoute = require('./routes/auth');
 const adminRoute = require('./routes/admin/auth');
 const categoryRoutes = require('./routes/category');
+const productRoutes = require('./routes/product');
 
 
 // ! MongoDb Connection
@@ -38,6 +39,7 @@ app.use(bodyParser());
 app.use("/api",authRoute);
 app.use("/api",adminRoute);
 app.use("/api", categoryRoutes);
+app.use("/api", productRoutes);
 
 
 

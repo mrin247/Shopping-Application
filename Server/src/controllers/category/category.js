@@ -1,4 +1,4 @@
-/// ! Import Dependencies
+// ! Import Dependencies
 const slugify = require("slugify");
 
 // ! Import Category Model
