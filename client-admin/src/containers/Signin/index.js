@@ -3,18 +3,34 @@ import Layout from "../../compoents/Layout";
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import Input from "../../compoents/UI";
 
+import { login } from "../../actions";
+import { useDispatch } from "react-redux";
+
 /**
  * @author
  * @function Signin
  **/
 
 const Signin = (props) => {
+  const dispatch = useDispatch();
+
+  const userLogin = (e) => {
+    e.preventDefault();
+
+    const user = {
+      email: "dummy@mail.com",
+      password: "dummy-password",
+    };
+
+    dispatch(login(user));
+  };
+
   return (
     <Layout>
       <Container>
         <Row style={{ marginTop: "50px" }}>
           <Col md={{ span: 6, offset: 3 }}>
-            <Form>
+            <Form onSubmit={userLogin}>
               <Input
                 label="Email"
                 type="email"
