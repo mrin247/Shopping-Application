@@ -1,8 +1,11 @@
 // ! Import Dependencies
 const slugify = require("slugify");
+const env = require("dotenv");
+
+env.config();
 
 // ! Import Category Model
-const Category = require("../../models/category");
+const Category = require("../models/category");
 
 // ! Rcursive function for creating nested categories[Tree : O(nlogn)]
 function childrenCategories(categories, parentId = null) {
@@ -51,10 +54,16 @@ exports.postCreateCategory = (req, res) => {
     parentId = req.body.parentId;
   }
 
+  let categoryUrl;
+  if (req.file) {
+    categoryUrl = process.env.API + "/public/" + req.file.filename;
+  }
+
   //Create new category from Destructured body parameters
   const _category = new Category({
     name,
     slug,
+    categoryImage: categoryUrl,
     parentId,
   });
 

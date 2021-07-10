@@ -12,8 +12,10 @@ const { postCreateProduct } = require("../controllers/product");
 const { requireSignin, adminMiddleware } = require("../utill/middleware");
 
 //  ! Use Dependencies
+//  Set Router Module
 const router = express.Router();
 
+//  For file upload
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(path.dirname(__dirname), "uploads"));

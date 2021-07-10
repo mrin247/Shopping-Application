@@ -1,23 +1,25 @@
 // ! Install Dependencies
-const mongoose = require('mongoose');
-const {Schema} = mongoose;
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
 //! Create categogrySchema
-const categorySchema = new Schema({
+const categorySchema = new Schema(
+  {
     name: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
     slug: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
-    parentId: {type: String}
-
-},{timestamps: true});
-
+    categoryImage: { type: String },
+    parentId: { type: String },
+  },
+  { timestamps: true }
+);
 
 // ! Exports categorySchema as Category
-module.exports = mongoose.model('Category', categorySchema);
+module.exports = mongoose.model("Category", categorySchema);
