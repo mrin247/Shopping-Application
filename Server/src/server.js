@@ -4,6 +4,7 @@ const env = require("dotenv");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const path = require("path");
+const cors = require("cors");
 
 // ! Configure environment variables
 env.config();
@@ -36,6 +37,7 @@ const app = express();
 
 // ! Middlewares
 app.use(bodyParser());
+app.use(cors());
 
 // ! Static middleware
 app.use("/public", express.static(path.join(__dirname, "uploads")));

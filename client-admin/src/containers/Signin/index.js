@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../compoents/Layout";
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import Input from "../../compoents/UI";
 
-import { login } from "../../actions";
-import { useDispatch } from "react-redux";
+import { isUserLoggedIn, login } from "../../actions";
+import { useDispatch, useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 /**
  * @author
@@ -12,18 +13,34 @@ import { useDispatch } from "react-redux";
  **/
 
 const Signin = (props) => {
+  // Make state using hooks
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState("");
+  const auth = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!auth.authenticate) {
+      dispatch(isUserLoggedIn());
+    }
+  }, []);
 
   const userLogin = (e) => {
     e.preventDefault();
 
     const user = {
-      email: "dummy@mail.com",
-      password: "dummy-password",
+      email,
+      password,
     };
 
     dispatch(login(user));
   };
+
+  if (auth.authenticate) {
+    return <Redirect to={"/"} />;
+  }
 
   return (
     <Layout>
@@ -35,16 +52,16 @@ const Signin = (props) => {
                 label="Email"
                 type="email"
                 placeholder="Email"
-                value=""
-                onChange={() => {}}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
 
               <Input
                 label="Password"
                 type="password"
                 placeholder="Password"
-                value=""
-                onChange={() => {}}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <Button variant="primary" type="submit">
                 Submit
