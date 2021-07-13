@@ -13,35 +13,34 @@ import { Redirect } from "react-router-dom";
  **/
 
 const Signin = (props) => {
-  // Make state using hooks
+  // Make state using useState function
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState("");
+
+  // ! Extract authentication data from store
   const auth = useSelector((state) => state.auth);
 
-  const dispatch = useDispatch();
+  // ! Returns a refernce to the store.dispatch() method
+  const dispatch = useDispatch(); 
 
-  useEffect(() => {
-    if (!auth.authenticate) {
-      dispatch(isUserLoggedIn());
-    }
-  }, []);
-
+  // ! user login function called on submitting form data
   const userLogin = (e) => {
     e.preventDefault();
-
     const user = {
       email,
       password,
     };
-
+    // ! Dispatch action to login user (user object passed as parameter)
     dispatch(login(user));
   };
 
+  // ! Check if authenticated or not
   if (auth.authenticate) {
     return <Redirect to={"/"} />;
   }
 
+  // ! Render singin form
   return (
     <Layout>
       <Container>

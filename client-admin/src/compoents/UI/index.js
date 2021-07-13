@@ -7,8 +7,9 @@ import { Form } from "react-bootstrap";
  **/
 
 const Input = (props) => {
+  // ! Render input component
   return (
-    <Form.Group controlId="formBasicText">
+    <Form.Group>
       <Form.Label>{props.label}</Form.Label>
       <Form.Control
         type={props.type}
