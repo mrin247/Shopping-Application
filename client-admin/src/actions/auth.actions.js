@@ -40,8 +40,6 @@ export const login = (user) => {
   };
 };
 
-
-
 // ! If user logged in , pass the token and the user as payload in login success action
 // ! Else pass the error in login failure action
 export const isUserLoggedIn = () => {
@@ -65,12 +63,27 @@ export const isUserLoggedIn = () => {
   };
 };
 
-// ! This action performs logout user on clicking signout button
+// ! This action performs signout user on clicking signout button
 export const signout = () => {
   return async (dispatch) => {
-    localStorage.clear(); // Clear the token and the user from localstorage
-    dispatch({
-      type: authConstants.LOGOUT_REQUEST,
-    });
+    // dispatch action for logout request
+    dispatch({ type: authConstants.LOGOUT_REQUEST });
+
+    // API call of admin/signout
+    const res = await axios.post("/admin/signout");
+
+    // If user is successfully signedout
+    if (res.status === 200) {
+      localStorage.clear(); // Clear the token and the user from localstorage
+      dispatch({
+        type: authConstants.LOGOUT_SUCCESS,
+      });
+    } else if (res.status === 400) {
+      // If there is a error to signing out
+      dispatch({
+        type: authConstants.LOGOUT_FAILURE,
+        payload: { error: res.data.error }, //Pass the error as payload
+      });
+    }
   };
 };
