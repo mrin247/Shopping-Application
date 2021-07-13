@@ -2,7 +2,7 @@
 /* eslint-disable default-case */
 /* eslint-disable import/no-anonymous-default-export */
 
-// ! import Action Constants
+// ! import Action Constants for authentication
 import { authConstants } from "../actions/constants";
 
 // ! Initital state of the store
@@ -39,7 +39,7 @@ export default (state = initState, action) => {
       break;
     case authConstants.LOGOUT_REQUEST:
       state={
-        ...initState
+        ...state
       }
       break;
   }

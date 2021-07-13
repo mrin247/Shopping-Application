@@ -13,7 +13,7 @@ import { Redirect } from "react-router-dom";
  **/
 
 const Signin = (props) => {
-  // Make state using useState function
+  // Make state using useState hook
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState("");

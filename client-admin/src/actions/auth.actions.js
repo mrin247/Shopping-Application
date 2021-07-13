@@ -5,7 +5,7 @@ import axios from "../helpers/axios";
 // ! This action connects signin route with /admin/signin and
 // ! Performs user login taking user as a parameter on submitting signin form
 export const login = (user) => {
-  // dispatch actions to chaneg the store's data
+  // dispatch actions to change the store's data
   return async (dispatch) => {
     // dispatch action for login request
     dispatch({ type: authConstants.LOGIN_REQUEST });
@@ -39,6 +39,8 @@ export const login = (user) => {
     }
   };
 };
+
+
 
 // ! If user logged in , pass the token and the user as payload in login success action
 // ! Else pass the error in login failure action
