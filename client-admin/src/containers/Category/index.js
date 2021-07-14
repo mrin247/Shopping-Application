@@ -28,7 +28,7 @@ const Category = (props) => {
     dispatch(getAllCategory());
   }, []);
 
-  // !
+  // ! Dispatch action to add category after modal close
   const handleClose = () => {
     const form = new FormData();
     form.append('name', categoryName);
@@ -68,6 +68,7 @@ const Category = (props) => {
     return options;
   };
 
+   // act when image for new category added
   const handlecategoryImage = (e) => {
     setCategoryImage(e.target.files[0]);
   };

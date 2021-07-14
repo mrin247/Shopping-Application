@@ -12,10 +12,43 @@ const initState = {
   loading: false,
 };
 
+// ! Function to build new nested categories
+const buildNewCategories = (parentId, categories, category) => {
+  let myCategories = [];
+  for(let cat of categories){
+
+      if(cat._id === parentId){
+        // Create new category object
+          const newCategory = {
+              _id: category._id,
+              name: category.name,
+              slug: category.slug,
+              parentId: category.parentId,
+              children: category.children
+          };
+          myCategories.push({
+              ...cat,
+              children: cat.children.length > 0 ? buildNewCategories(parentId, [...cat.children, newCategory] ,category) : []
+          })
+      }else{
+          myCategories.push({
+              ...cat,
+              children: cat.children ? buildNewCategories(parentId, cat.children, category) : []
+          });
+      }
+
+      
+  }
+
+
+  return myCategories;
+}
+
 // ! Default export reducers for authentication
 export default (state = initState, action) => {
   console.log(action);
   switch (action.type) {
+
     case categoryConstants.GET_ALL_CATEGORIES_REQ:
       state = {
         // update state
@@ -42,8 +75,15 @@ export default (state = initState, action) => {
       };
       break;
     case categoryConstants.ADD_NEW_CATEGORIES_SUCCESS:
+      const category = action.payload.category;
+      const updatedCategories = buildNewCategories(
+        category.parentId,
+        state.categories,
+        category
+      );
       state = {
         ...state,
+        categories: updatedCategories,
         loading: false,
       };
       break;

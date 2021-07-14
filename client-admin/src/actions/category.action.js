@@ -44,7 +44,7 @@ export const addCategory = (form) => {
     if (res.status === 201) {
       dispatch({
         type: categoryConstants.ADD_NEW_CATEGORIES_SUCCESS,
-        payload: res.data.categories, // Pass the added category as payload to store
+        payload: { category: res.data.category }, // Pass the added category as payload to store
       });
     } else {
       // If there is a error to adding category

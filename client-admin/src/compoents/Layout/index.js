@@ -3,6 +3,7 @@ import Header from "../Header/index";
 import { Col, Container, Jumbotron, Row } from "react-bootstrap";
 //import './style.css';
 import { NavLink } from "react-router-dom";
+import "./styles.css";
 
 const Layout = (props) => {
   // ! Render Layout component
@@ -15,7 +16,9 @@ const Layout = (props) => {
             <Col md={2} className="sidebar">
               <ul>
                 <li>
-                  <NavLink to={"/"}>Home</NavLink>
+                  <NavLink exact to={"/"}>
+                    Home
+                  </NavLink>
                 </li>
                 <li>
                   <NavLink to={"/category"}>category</NavLink>
