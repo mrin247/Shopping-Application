@@ -29,7 +29,7 @@ router.post("/admin/signup", validateSignupReq, isValidatedReq, postSignup);
 
 router.post("/admin/signin", validateSigninReq, isValidatedReq, postSignin);
 
-router.post("/admin/signout", requireSignin, postSignout);
+router.post("/admin/signout", postSignout);
 
 // router.post("/profile",requireSignin, (req,res)=>{
 //     res.status(200).json({
