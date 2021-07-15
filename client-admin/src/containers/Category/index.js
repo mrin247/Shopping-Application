@@ -31,13 +31,13 @@ const Category = (props) => {
   // ! Dispatch action to add category after modal close
   const handleClose = () => {
     const form = new FormData();
-    form.append('name', categoryName);
-    form.append('parentId', parentCategoryId);
-    form.append('categoryImage', categoryImage);
+    form.append("name", categoryName);
+    form.append("parentId", parentCategoryId);
+    form.append("categoryImage", categoryImage);
     dispatch(addCategory(form));
 
     setShow(false);
-  }
+  };
   const handleShow = () => setShow(true);
 
   // ! This recursive function render categories by maintaining and returning an array
@@ -68,17 +68,15 @@ const Category = (props) => {
     return options;
   };
 
-   // act when image for new category added
+  // act when image for new category added
   const handlecategoryImage = (e) => {
     setCategoryImage(e.target.files[0]);
   };
 
-  
-
   // ! Render Categories
   return (
     <Layout sidebar>
-      <Container>
+      <Container fluid>
         <Row>
           <Col md={12}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
