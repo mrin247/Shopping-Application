@@ -23,10 +23,6 @@ const Category = (props) => {
   // ! Returns a refernce to the store.dispatch() method
   const dispatch = useDispatch();
 
-  // ! Render every time
-  useEffect(() => {
-    dispatch(getAllCategory());
-  }, []);
 
   // ! Dispatch action to add category after modal close
   const handleClose = () => {
@@ -35,6 +31,10 @@ const Category = (props) => {
     form.append("parentId", parentCategoryId);
     form.append("categoryImage", categoryImage);
     dispatch(addCategory(form));
+
+    // Reset
+    setCategoryName('');
+    setParentcategoryId('');
 
     setShow(false);
   };

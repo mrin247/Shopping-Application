@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import { isUserLoggedIn } from './actions';
+import { getAllCategory, isUserLoggedIn } from './actions';
 import './App.css';
 import PrivateRoute from './compoents/HOC/privateRoute';
 import Home from './containers/Home';
@@ -20,10 +20,11 @@ function App() {
   // ! Returns a refernce to the store.dispatch() method
   const dispatch = useDispatch();
 
-  // ! using this hook, React will be informed that App components needs to dispatcch action after every updates
+  // ! using this hook, React will be informed that App components needs to dispatch action after every updates
   useEffect(() => {
     if (!auth.authenticate) {
       dispatch(isUserLoggedIn()); // ! Dispatch isUserLoggedIn action to store the token and the user
+      dispatch(getAllCategory()); // ! Dispatch getALLCategory action to fetch all categories from API
     }
   }, []);
 

@@ -32,7 +32,7 @@ const Products = (props) => {
   //   //dispatch(getAllCategory());
   // }, []);
 
-  // ! Dispatch action to add category after modal close
+  // ! Dispatch action to add product after modal close
   const handleClose = () => {
     const form = new FormData();
     form.append("name", name);
@@ -61,7 +61,7 @@ const Products = (props) => {
     return options;
   };
 
-  // act when image for new category added
+  // act when image for new product photo added
   const handleProductPhotos = (e) => {
     setProductPhotos([...productPhotos, e.target.files[0]]);
   };
