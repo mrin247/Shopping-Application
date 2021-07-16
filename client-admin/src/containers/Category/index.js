@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container, Row, Modal, Button } from "react-bootstrap";
+import { Col, Container, Row, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { addCategory, getAllCategory } from "../../actions/category.action";
 import Layout from "../../compoents/Layout";
-import Input from "../../compoents/UI";
+import Input from "../../compoents/UI/Input";
+import Modal from "../../compoents/UI/Modal";
 
 /**
  * @author
@@ -23,7 +24,6 @@ const Category = (props) => {
   // ! Returns a refernce to the store.dispatch() method
   const dispatch = useDispatch();
 
-
   // ! Dispatch action to add category after modal close
   const handleClose = () => {
     const form = new FormData();
@@ -33,8 +33,8 @@ const Category = (props) => {
     dispatch(addCategory(form));
 
     // Reset
-    setCategoryName('');
-    setParentcategoryId('');
+    setCategoryName("");
+    setParentcategoryId("");
 
     setShow(false);
   };
@@ -91,13 +91,42 @@ const Category = (props) => {
           </Col>
         </Row>
       </Container>
+      <Modal
+        show={show}
+        handleClose={handleClose}
+        modalTitle={"Add new Category"}
+      >
+        <Input
+          value={categoryName}
+          placeholder={"Category Name"}
+          onChange={(e) => setCategoryName(e.target.value)}
+        />
+        <select
+          className="form-control"
+          value={parentCategoryId}
+          onChange={(e) => setParentcategoryId(e.target.value)}
+        >
+          <option>select category</option>
+          {createCategoryList(category.categories).map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.name}
+            </option>
+          ))}
+        </select>
+        <input
+          type="file"
+          name="categoryImage"
+          onChange={handlecategoryImage}
+        />
+      </Modal>
+    </Layout>
+  );
+};
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add new category</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Input
+export default Category;
+
+/**
+ * <Input
             value={categoryName}
             placeholder={"Category Name"}
             onChange={(e) => setCategoryName(e.target.value)}
@@ -119,15 +148,4 @@ const Category = (props) => {
             name="categoryImage"
             onChange={handlecategoryImage}
           />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </Layout>
-  );
-};
-
-export default Category;
+ */

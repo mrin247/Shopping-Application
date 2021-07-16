@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Layout from "../../compoents/Layout";
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
 
-import Input from "../../compoents/UI";
+import Input from "../../compoents/UI/Input";
 import { Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signup } from "../../actions";

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../compoents/Layout";
 import { Container, Form, Row, Col, Button } from "react-bootstrap";
-import Input from "../../compoents/UI";
+import Input from "../../compoents/UI/Input";
 
 import { isUserLoggedIn, login } from "../../actions";
 import { useDispatch, useSelector } from "react-redux";
