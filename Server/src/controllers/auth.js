@@ -1,11 +1,14 @@
+
+// ! Import Dependencies
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 // ! Import Models
 const User = require("../models/user");
-const jwt = require("jsonwebtoken");
 
 // ! This controller handles signup request from "/signup" route
 exports.postSignup = (req, res, next) => {
   //  Check if user email id is already registered or not
-  User.findOne({ email: req.body.email }).exec((err, user) => {
+  User.findOne({ email: req.body.email }).exec(async (err, user) => {
     if (user)
       return res.status(400).json({
         message: "User is already registered",
@@ -13,12 +16,15 @@ exports.postSignup = (req, res, next) => {
     // Destructure input from req body
     const { firstName, lastName, email, password } = req.body;
 
+    // Hash password
+    const hash_password = await bcrypt.hash(password, 10);
+
     // Create new user from Destructured body parameters
     const _user = new User({
       firstName,
       lastName,
       email,
-      password,
+      hash_password,
       userName: Math.random().toString(),
     });
 
