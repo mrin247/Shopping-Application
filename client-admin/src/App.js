@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import { getAllCategory, isUserLoggedIn } from './actions';
+import { getAllCategory, getInitialdata, isUserLoggedIn } from './actions';
 import './App.css';
 import PrivateRoute from './compoents/HOC/privateRoute';
 import Home from './containers/Home';
@@ -24,8 +24,8 @@ function App() {
   useEffect(() => {
     if (!auth.authenticate) {
       dispatch(isUserLoggedIn()); // ! Dispatch isUserLoggedIn action to store the token and the user
-      dispatch(getAllCategory()); // ! Dispatch getALLCategory action to fetch all categories from API
     }
+    dispatch(getInitialdata()); // ! Dispatch initialData action to fetch all categories & Product initially  from API
   }, []);
 
   // ! Render React App 

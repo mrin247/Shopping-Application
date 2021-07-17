@@ -15,6 +15,7 @@ const adminRoute = require("./routes/admin/auth");
 const categoryRoutes = require("./routes/category");
 const productRoutes = require("./routes/product");
 const cartRoutes = require("./routes/cart");
+const initialDataRoutes = require("./routes/admin/initialData");
 
 // ! MongoDb Connection
 mongoose
@@ -48,6 +49,7 @@ app.use("/api", adminRoute);
 app.use("/api", categoryRoutes);
 app.use("/api", productRoutes);
 app.use("/api", cartRoutes);
+app.use("/api", initialDataRoutes);
 
 //  ! Satrt Server
 app.listen(process.env.PORT, () => {

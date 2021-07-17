@@ -6,3 +6,6 @@ export * from "./user.actions";
 
 // ! Export all from category actions
 export * from "./category.action"
+
+// ! Export all from initialData action
+export * from "./initial.action"

@@ -21,9 +21,10 @@ const Products = (props) => {
   const [categoryId, setCategoryId] = useState("");
   const [productPhotos, setProductPhotos] = useState([]);
 
-  // ! Extract category data from store
+  // ! Extract category & product data from store
 
   const category = useSelector((state) => state.category);
+  const product = useSelector((state) => state.product);
 
   // ! Returns a refernce to the store.dispatch() method
   const dispatch = useDispatch();
@@ -82,14 +83,19 @@ const Products = (props) => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>2</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-          </tr>
+          {
+          product.products.length > 0
+            ? product.products.map((product) => (
+                <tr key={product._id}>
+                  <td>2</td>
+                  <td>{product.name}</td>
+                  <td>{product.price}</td>
+                  <td>{product.quantity}</td>
+                  <td>Category-Name!!!</td>
+                  <td>{product.description}</td>
+                </tr>
+              ))
+            : null }
         </tbody>
       </Table>
     );
