@@ -1,12 +1,13 @@
 // ! Import Dependencies
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const shortId = require("shortid");
 
 // ! Import Models
 const User = require("../../models/user");
 
 // ! This controller handles signup request from "admin/signup" route
-exports.postSignup =  (req, res, next) => {
+exports.postSignup = (req, res, next) => {
   //  Check if user email id is already registered or not
   User.findOne({ email: req.body.email }).exec(async (err, user) => {
     if (user)
@@ -26,7 +27,7 @@ exports.postSignup =  (req, res, next) => {
       lastName,
       email,
       hash_password,
-      userName: Math.random().toString(),
+      userName: shortId.generate(),
       role: "admin",
     });
 

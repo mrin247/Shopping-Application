@@ -33,26 +33,3 @@ export const getAllCategory = () => {
     }
   };
 };
-
-// ! This action connects addcategory with /category/create and adds category through the client side
-export const addCategory = (form) => {
-  return async (dispatch) => {
-    // dispatch action for requesting to add categories
-    dispatch({ type: categoryConstants.ADD_NEW_CATEGORIES_REQ });
-    // API call of /category/create
-    const res = await axios.post("/category/create", form);
-    // If category is successfully added
-    if (res.status === 201) {
-      dispatch({
-        type: categoryConstants.ADD_NEW_CATEGORIES_SUCCESS,
-        payload: { category: res.data.category }, // Pass the added category as payload to store
-      });
-    } else {
-      // If there is a error to adding category
-      dispatch({
-        type: categoryConstants.ADD_NEW_CATEGORIES_FAILURE,
-        payload: res.data.error, //Pass the error as payload
-      });
-    }
-  };
-};

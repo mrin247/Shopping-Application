@@ -1,7 +1,7 @@
-
 // ! Import Dependencies
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const shortId = require("shortid");
 // ! Import Models
 const User = require("../models/user");
 
@@ -25,7 +25,7 @@ exports.postSignup = (req, res, next) => {
       lastName,
       email,
       hash_password,
-      userName: Math.random().toString(),
+      userName: shortId.generate(),
     });
 
     // Save User to DB
