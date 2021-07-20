@@ -6,7 +6,7 @@ const shortid = require("shortid");
 const path = require('path');
 
 // ! Import Model
-const { postCreateProduct } = require("../controllers/product");
+const { postCreateProduct, getProductsBySlug } = require("../controllers/product");
 
 // ! Import Middlewares
 const { requireSignin, adminMiddleware } = require("../utill/middleware");
@@ -27,7 +27,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // ! GET Requests
-//router.get('/product/getCategory', getCategories);
+router.get('/product/:slug', getProductsBySlug);
 
 // ! POST Requests
 router.post(

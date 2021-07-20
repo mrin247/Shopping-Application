@@ -62,7 +62,7 @@ const buildNewCategories = (parentId, categories, category) => {
   return myCategories;
 };
 
-// ! Default export reducers for authentication
+// ! Default export reducers for category
 export default (state = initState, action) => {
   console.log(action);
   switch (action.type) {
