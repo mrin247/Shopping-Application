@@ -9,7 +9,12 @@ import Input from "../../compoents/UI/Input";
 import Modal from "../../compoents/UI/Modal";
 
 // ! Import Icons
-import { IoCheckboxOutline, IoCheckbox, IoChevronDownCircleSharp, IoChevronForwardCircleSharp } from "react-icons/io5";
+import {
+  IoCheckboxOutline,
+  IoCheckbox,
+  IoChevronDownCircleSharp,
+  IoChevronForwardCircleSharp,
+} from "react-icons/io5";
 import "react-checkbox-tree/lib/react-checkbox-tree.css";
 
 /**
@@ -25,6 +30,10 @@ const Category = (props) => {
   const [categoryImage, setCategoryImage] = useState("");
   const [checked, setChecked] = useState([]);
   const [expanded, setExpanded] = useState([]);
+  const [checkedArray, setCheckedArray] = useState([]);
+  const [expandedArray, setExpandedArray] = useState([]);
+
+  const [updateCategoryModal, setUpdateCategoryModal] = useState(false);
   // ! Extract category data from store
   const category = useSelector((state) => state.category);
 
@@ -46,6 +55,12 @@ const Category = (props) => {
     setShow(false);
   };
   const handleShow = () => setShow(true);
+
+  // ! Dispatch action to update category after modal close
+
+  const updateCategory = () => {
+    setUpdateCategoryModal(true);
+  };
 
   // ! This recursive function render categories by maintaining and returning an array
   const renderCategories = (categories) => {
@@ -92,7 +107,6 @@ const Category = (props) => {
         </Row>
         <Row>
           <Col md={12}>
-            
             <CheckboxTree
               nodes={renderCategories(category.categories)}
               checked={checked}
@@ -104,12 +118,19 @@ const Category = (props) => {
                 uncheck: <IoCheckboxOutline />,
                 halfCheck: <IoCheckboxOutline />,
                 expandClose: <IoChevronForwardCircleSharp />,
-                expandOpen: <IoChevronDownCircleSharp />
-            }}
+                expandOpen: <IoChevronDownCircleSharp />,
+              }}
             />
           </Col>
         </Row>
+        <Row>
+          <Col>
+            <button>Delete</button>
+            <button onClick={updateCategory}>Edit</button>
+          </Col>
+        </Row>
       </Container>
+      {/* // ! Add category modal */}
       <Modal
         show={show}
         handleClose={handleClose}
@@ -132,6 +153,53 @@ const Category = (props) => {
             </option>
           ))}
         </select>
+        <input
+          type="file"
+          name="categoryImage"
+          onChange={handlecategoryImage}
+        />
+      </Modal>
+      {/* // ! Edit category modal */}
+      <Modal
+        show={updateCategoryModal}
+        handleClose={() => {
+          setUpdateCategoryModal(false);
+        }}
+        modalTitle={"Update Categories"}
+        size="lg"
+      >
+        <Row>
+          <Col>
+            <Input
+              value={categoryName}
+              placeholder={"Category Name"}
+              onChange={(e) => setCategoryName(e.target.value)}
+            />
+          </Col>
+          <Col>
+            <select
+              className="form-control"
+              value={parentCategoryId}
+              onChange={(e) => setParentcategoryId(e.target.value)}
+            >
+              <option>select category</option>
+              {createCategoryList(category.categories).map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.name}
+                </option>
+              ))}
+            </select>
+          </Col>
+          <Col>
+            <select className="form-control">
+              <option value="">Select type</option>
+              <option value="store">Store</option>
+              <option value="product">Product</option>
+              <option value="page">page</option>
+            </select>
+          </Col>
+        </Row>
+
         <input
           type="file"
           name="categoryImage"
