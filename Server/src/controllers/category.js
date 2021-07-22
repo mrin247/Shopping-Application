@@ -87,3 +87,43 @@ exports.getCategories = (req, res, next) => {
     }
   });
 };
+
+// ! This controller update categories from Category model
+
+exports.updateCategories = async (req, res, next) => {
+  const { _id, name, parentId, type } = req.body;
+  const updatedCategories = [];
+  if (name instanceof Array) {
+    for (let i = 0; i < name.length; i++) {
+      const category = {
+        name: name[i],
+        type: type[i],
+      };
+      if (parentId[i] !== "") {
+        category.parentId = parentId[i];
+      }
+      const updatedCategory = await Category.findOneAndUpdate(
+        { _id: _id[i] },
+        category,
+        { new: true }
+      );
+      updatedCategories.push(updatedCategory);
+      
+    }
+    return res.status(201).json({ updatedCategories });
+  } else {
+    const category = {
+      name: name,
+      type: type,
+    };
+    if (parentId !== "") {
+      category.parentId = parentId;
+    }
+    const updatedCategory = await Category.findOneAndUpdate({ _id }, category, {
+      new: true,
+    });
+
+    
+  }
+  return res.status(201).json({ updatedCategory });
+};

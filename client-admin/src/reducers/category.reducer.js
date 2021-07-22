@@ -36,18 +36,18 @@ const buildNewCategories = (parentId, categories, category) => {
         name: category.name,
         slug: category.slug,
         parentId: category.parentId,
-        children: category.children,
+        children: [],
       };
       myCategories.push({
         ...cat,
         children:
-          cat.children
+          cat.children.length > 0
             ? buildNewCategories(
                 parentId,
                 [...cat.children, newCategory],
                 category
               )
-            : [],
+            : [newCategory],
       });
     } else {
       myCategories.push({

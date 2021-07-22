@@ -9,6 +9,7 @@ const path = require("path");
 const {
   postCreateCategory,
   getCategories,
+  updateCategories,
 } = require("../controllers/category");
 
 // ! Import Middlewares
@@ -40,6 +41,13 @@ router.post(
   adminMiddleware,
   upload.single("categoryImage"),
   postCreateCategory
+);
+
+router.post(
+  "/category/update",
+
+  upload.array("categoryImage"),
+  updateCategories
 );
 
 // ! Export Router
