@@ -4,7 +4,7 @@ import CheckboxTree from "react-checkbox-tree";
 import { Col, Container, Row, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 
-import { addCategory, getAllCategory, updateCategories } from "../../actions";
+import { addCategory, deleteCategories, getAllCategory, updateCategories } from "../../actions";
 import Layout from "../../compoents/Layout";
 import Input from "../../compoents/UI/Input";
 import Modal from "../../compoents/UI/Modal";
@@ -35,6 +35,7 @@ const Category = (props) => {
   const [expandedArray, setExpandedArray] = useState([]);
 
   const [updateCategoryModal, setUpdateCategoryModal] = useState(false);
+  const [deleteCategoryModal, setDeleteCategoryModal] = useState(false);
   // ! Extract category data from store
   const category = useSelector((state) => state.category);
 
@@ -60,31 +61,8 @@ const Category = (props) => {
   // ! Dispatch action to update category after modal close
 
   const updateCategory = () => {
+    updateCheckedAndExpandedcategories();
     setUpdateCategoryModal(true);
-    const categories = createCategoryList(category.categories);
-    const checkedArray = [];
-    // Find category of checked items
-    checked.length > 0 &&
-      checked.forEach((categoryId, index) => {
-        const category = categories.find(
-          (category, _index) => categoryId == category.value
-        );
-        category && checkedArray.push(category);
-      });
-    // Find category of expanded items
-    const expandedArray = [];
-    expanded.length > 0 &&
-      expanded.forEach((categoryId, index) => {
-        const category = categories.find(
-          (category, _index) => categoryId == category.value
-        );
-        category && expandedArray.push(category);
-      });
-    // Push checkedArray and expandedArray to the state
-    setCheckedArray(checkedArray);
-    setExpandedArray(expandedArray);
-
-    console.log({ checked, expanded, categories, checkedArray, expandedArray });
   };
 
   // ! This recursive function render categories by maintaining and returning an array
@@ -135,6 +113,34 @@ const Category = (props) => {
       );
       setExpandedArray(updatedExpandedArray);
     }
+  };
+
+  // ! uddate checked and expanded categoriees
+  const updateCheckedAndExpandedcategories = () => {
+    const categories = createCategoryList(category.categories);
+    const checkedArray = [];
+    // Find category of checked items
+    checked.length > 0 &&
+      checked.forEach((categoryId, index) => {
+        const category = categories.find(
+          (category, _index) => categoryId == category.value
+        );
+        category && checkedArray.push(category);
+      });
+    // Find category of expanded items
+    const expandedArray = [];
+    expanded.length > 0 &&
+      expanded.forEach((categoryId, index) => {
+        const category = categories.find(
+          (category, _index) => categoryId == category.value
+        );
+        category && expandedArray.push(category);
+      });
+    // Push checkedArray and expandedArray to the state
+    setCheckedArray(checkedArray);
+    setExpandedArray(expandedArray);
+
+    console.log({ checked, expanded, categories, checkedArray, expandedArray });
   };
 
   // ! Dispatch action to update category after modal close
@@ -288,7 +294,7 @@ const Category = (props) => {
     );
   };
 
-  // ! Function to Render update categories modal
+  // ! Function to Render add categories modal
   const renderAddCategoriesModal = () => {
     return (
       <Modal
@@ -321,6 +327,64 @@ const Category = (props) => {
       </Modal>
     );
   };
+  // ! Function to delete Categpries
+  const deleteCategoriesOnClick = () => {
+    const checkedIdsArray = checkedArray.map((item, index) => ({
+      _id: item.value,
+    }));
+    const expandedIdsArray = expandedArray.map((item, index) => ({
+      _id: item.value,
+    }));
+
+
+    const idsArray= expandedIdsArray.concat(checkedIdsArray);
+    dispatch(deleteCategories(idsArray)).then(result => {
+      if (result) {
+          dispatch(getAllCategory())
+          setDeleteCategoryModal(false)
+      }
+  });
+  };
+
+  // ! function to render delete category modal
+  const renderDeleteCategoryModal = () => {
+    return (
+      <Modal
+        modalTitle={"Confirm"}
+        show={deleteCategoryModal}
+        handleClose={() => setDeleteCategoryModal(false)}
+        buttons={[
+          {
+            label: "No",
+            color: "primary",
+            onClick: () => {
+              alert("NO");
+            },
+          },
+          {
+            label: "Yes",
+            color: "danger",
+            onClick: deleteCategoriesOnClick,
+          },
+        ]}
+      >
+        <h5>Expanded</h5>
+        {expandedArray.map((item, index) => (
+          <span key={index}>{item.name}</span>
+        ))}
+        <h5>checked</h5>
+        {checkedArray.map((item, index) => (
+          <span key={index}>{item.name}</span>
+        ))}
+      </Modal>
+    );
+  };
+  // ! Dispatch action to delete category after modal close
+  const deleteCategory = () => {
+    updateCheckedAndExpandedcategories();
+    setDeleteCategoryModal(true);
+  };
+
   // ! Render Categories
   return (
     <Layout sidebar>
@@ -353,7 +417,7 @@ const Category = (props) => {
         </Row>
         <Row>
           <Col>
-            <button>Delete</button>
+            <button onClick={deleteCategory}>Delete</button>
             <button onClick={updateCategory}>Edit</button>
           </Col>
         </Row>
@@ -362,6 +426,8 @@ const Category = (props) => {
       {renderAddCategoriesModal()}
       {/* // ! Edit category modal */}
       {renderUpdateCategoriesModal()}
+      {/* // ! delete category modal */}
+      {renderDeleteCategoryModal()}
     </Layout>
   );
 };

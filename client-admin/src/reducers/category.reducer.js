@@ -24,29 +24,27 @@ const buildNewCategories = (parentId, categories, category) => {
         _id: category._id,
         name: category.name,
         slug: category.slug,
+        type: category.type,
         children: [],
       },
     ];
   }
+
   for (let cat of categories) {
-    if (cat._id === parentId) {
-      // Create new category object
+    if (cat._id == parentId) {
       const newCategory = {
         _id: category._id,
         name: category.name,
         slug: category.slug,
         parentId: category.parentId,
+        type: category.type,
         children: [],
       };
       myCategories.push({
         ...cat,
         children:
           cat.children.length > 0
-            ? buildNewCategories(
-                parentId,
-                [...cat.children, newCategory],
-                category
-              )
+            ? [...cat.children, newCategory]
             : [newCategory],
       });
     } else {

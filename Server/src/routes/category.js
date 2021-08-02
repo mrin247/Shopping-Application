@@ -10,6 +10,7 @@ const {
   postCreateCategory,
   getCategories,
   updateCategories,
+  deleteCategories,
 } = require("../controllers/category");
 
 // ! Import Middlewares
@@ -48,6 +49,12 @@ router.post(
 
   upload.array("categoryImage"),
   updateCategories
+);
+
+router.post(
+  "/category/delete",
+
+  deleteCategories
 );
 
 // ! Export Router

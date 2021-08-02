@@ -6,6 +6,7 @@ env.config();
 
 // ! Import Category Model
 const Category = require("../models/category");
+const shortid = require("shortid");
 
 // ! Rcursive function for creating nested categories[Tree : O(nlogn)]
 function childrenCategories(categories, parentId = null) {
@@ -49,7 +50,7 @@ exports.postCreateCategory = (req, res) => {
   // Destructure input from req body
   const { name } = req.body;
 
-  const slug = slugify(name);
+  const slug = `${slugify(name)}-${shortid.generate()}`;
   let parentId = null;
   if (req.body.parentId) {
     parentId = req.body.parentId;
@@ -126,4 +127,25 @@ exports.updateCategories = async (req, res, next) => {
     
   }
   return res.status(201).json({ updatedCategory });
+};
+
+
+// ! This controller update categories from Category model
+
+exports.deleteCategories = async (req, res, next) => {
+  const { ids } = req.body.payload;
+  const deletedCategories = [];
+  for (let i = 0; i < ids.length; i++) {
+    const deleteCategory = await Category.findOneAndDelete({
+      _id: ids[i]._id,
+      //createdBy: req.user._id,
+    });
+    deletedCategories.push(deleteCategory);
+  }
+
+  if (deletedCategories.length == ids.length) {
+    res.status(201).json({ message: "Categories removed" });
+  } else {
+    res.status(400).json({ message: "Something went wrong" });
+  }
 };
