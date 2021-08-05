@@ -90,8 +90,7 @@ exports.getCategories = (req, res, next) => {
 };
 
 // ! This controller update categories from Category model
-
-exports.updateCategories = async (req, res, next) => {
+exports.updateCategories = async (req, res) => {
   const { _id, name, parentId, type } = req.body;
   const updatedCategories = [];
   if (name instanceof Array) {
@@ -103,19 +102,19 @@ exports.updateCategories = async (req, res, next) => {
       if (parentId[i] !== "") {
         category.parentId = parentId[i];
       }
+
       const updatedCategory = await Category.findOneAndUpdate(
         { _id: _id[i] },
         category,
         { new: true }
       );
       updatedCategories.push(updatedCategory);
-      
     }
-    return res.status(201).json({ updatedCategories });
+    return res.status(201).json({ updateCategories: updatedCategories });
   } else {
     const category = {
-      name: name,
-      type: type,
+      name,
+      type,
     };
     if (parentId !== "") {
       category.parentId = parentId;
@@ -123,10 +122,8 @@ exports.updateCategories = async (req, res, next) => {
     const updatedCategory = await Category.findOneAndUpdate({ _id }, category, {
       new: true,
     });
-
-    
+    return res.status(201).json({ updatedCategory });
   }
-  return res.status(201).json({ updatedCategory });
 };
 
 
