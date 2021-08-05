@@ -4,7 +4,12 @@ import CheckboxTree from "react-checkbox-tree";
 import { Col, Container, Row, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 
-import { addCategory, deleteCategories, getAllCategory, updateCategories } from "../../actions";
+import {
+  addCategory,
+  deleteCategories,
+  getAllCategory,
+  updateCategories,
+} from "../../actions";
 import Layout from "../../compoents/Layout";
 import Input from "../../compoents/UI/Input";
 import Modal from "../../compoents/UI/Modal";
@@ -159,8 +164,7 @@ const Category = (props) => {
       form.append("parentId", item.parentId ? item.parentId : "");
       form.append("type", item.type);
     });
-    dispatch(updateCategories(form))
-    .then((result) => {
+    dispatch(updateCategories(form)).then((result) => {
       if (result) {
         dispatch(getAllCategory());
       }
@@ -337,14 +341,15 @@ const Category = (props) => {
       _id: item.value,
     }));
 
-
-    const idsArray= expandedIdsArray.concat(checkedIdsArray);
-    dispatch(deleteCategories(idsArray)).then(result => {
-      if (result) {
-          dispatch(getAllCategory())
-          setDeleteCategoryModal(false)
-      }
-  });
+    const idsArray = expandedIdsArray.concat(checkedIdsArray);
+    if (checkedIdsArray.length > 0) {
+      dispatch(deleteCategories(checkedIdsArray)).then((result) => {
+        if (result) {
+          dispatch(getAllCategory());
+          setDeleteCategoryModal(false);
+        }
+      });
+    }
   };
 
   // ! function to render delete category modal
