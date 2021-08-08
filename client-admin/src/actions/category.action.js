@@ -3,7 +3,7 @@ import axios from "../helpers/axios";
 import { categoryConstants } from "./constants";
 
 // ! This action connects category route with /category/getCategory and shows category list on the client side
-export const getAllCategory = () => {
+const getAllCategory = () => {
   // dispatch actions to change the store's data
   return async (dispatch) => {
     // dispatch action for requesting to show categories
@@ -61,25 +61,21 @@ export const addCategory = (form) => {
 export const updateCategories = (form) => {
   return async (dispatch) => {
     // dispatch action for requesting to add categories
-    //dispatch({ type: categoryConstants.ADD_NEW_CATEGORIES_REQ });
+    dispatch({ type: categoryConstants.UPDATE_CATEGORIES_REQ });
     // API call of /category/create
     const res = await axios.post("/category/update", form);
     // If category is successfully added
     if (res.status === 201) {
-      console.log(res);
-      return true;
-      
-      // dispatch({
-      //   type: categoryConstants.ADD_NEW_CATEGORIES_SUCCESS,
-      //   payload: { category: res.data.category }, // Pass the added category as payload to store
-      // });
+      dispatch({
+        type: categoryConstants.UPDATE_CATEGORIES_SUCCESS,
+      });
+      dispatch(getAllCategory());
     } else {
-      console.log(res);
-      // // If there is a error to adding category
-      // dispatch({
-      //   type: categoryConstants.ADD_NEW_CATEGORIES_FAILURE,
-      //   payload: res.data.error, //Pass the error as payload
-      // });
+      // If there is a error to updating category
+      dispatch({
+        type: categoryConstants.UPDATE_CATEGORIES_FAILURE,
+        payload: res.data.error, //Pass the error as payload
+      });
     }
   };
 };
@@ -113,3 +109,5 @@ export const deleteCategories = (ids) => {
     }
   };
 };
+
+export{getAllCategory}
