@@ -24,6 +24,7 @@ function childrenCategories(categories, parentId = null) {
       name: cats.name,
       slug: cats.slug,
       parentId: cats.parentId,
+      type: cats.type,
       children: childrenCategories(categories, cats._id),
     });
   }
@@ -67,6 +68,7 @@ exports.postCreateCategory = (req, res) => {
     slug,
     categoryImage: categoryUrl,
     parentId,
+    type,
   });
 
   // Save Category
@@ -125,7 +127,6 @@ exports.updateCategories = async (req, res) => {
     return res.status(201).json({ updatedCategory });
   }
 };
-
 
 // ! This controller update categories from Category model
 
