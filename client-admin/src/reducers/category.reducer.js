@@ -81,8 +81,10 @@ export default (state = initState, action) => {
     case categoryConstants.GET_ALL_CATEGORIES_FAILURE:
       state = {
         error: action.payload.error,
+        loading: false,
       };
       break;
+
     case categoryConstants.ADD_NEW_CATEGORIES_REQ:
       state = {
         ...state,
@@ -105,24 +107,26 @@ export default (state = initState, action) => {
     case categoryConstants.ADD_NEW_CATEGORIES_FAILURE:
       state = {
         ...initState,
+        loading: false,
       };
       break;
 
-    case categoryConstants.UPDATE_CATEGORIES_REQ:
+    case categoryConstants.DELETE_CATEGORIES_REQ:
       state = {
         ...state,
         loading: true,
       };
       break;
-    case categoryConstants.UPDATE_CATEGORIES_SUCCESS:
+    case categoryConstants.DELETE_CATEGORIES_SUCCESS:
       state = {
         ...state,
         loading: false,
       };
       break;
-    case categoryConstants.UPDATE_CATEGORIES_FAILURE:
+    case categoryConstants.DELETE_CATEGORIES_FAILURE:
       state = {
         ...initState,
+        loading: false,
       };
       break;
   }

@@ -179,10 +179,6 @@ const Category = (props) => {
     setUpdateCategoryModal(false);
   };
 
-
-
-
-
   // ! Function to delete Categpries
   const deleteCategoriesOnClick = () => {
     const checkedIdsArray = checkedArray.map((item, index) => ({
@@ -194,12 +190,8 @@ const Category = (props) => {
 
     const idsArray = expandedIdsArray.concat(checkedIdsArray);
     if (checkedIdsArray.length > 0) {
-      dispatch(deleteCategories(checkedIdsArray)).then((result) => {
-        if (result) {
-          dispatch(getAllCategory());
-          setDeleteCategoryModal(false);
-        }
-      });
+      dispatch(deleteCategories(checkedIdsArray));
+      setDeleteCategoryModal(false);
     }
   };
 
@@ -253,10 +245,18 @@ const Category = (props) => {
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <h3>Category</h3>
               <div className="actionBtnContainer">
-                
-                <button onClick={handleShow}><IoBagAddOutline/><span> Add</span></button>
-                <button onClick={deleteCategory}><IoTrash/><span> Delete</span></button>
-                <button onClick={updateCategory}><IoCloudUpload/><span> Edit</span></button>
+                <button onClick={handleShow}>
+                  <IoBagAddOutline />
+                  <span> Add</span>
+                </button>
+                <button onClick={deleteCategory}>
+                  <IoTrash />
+                  <span> Delete</span>
+                </button>
+                <button onClick={updateCategory}>
+                  <IoCloudUpload />
+                  <span> Edit</span>
+                </button>
               </div>
             </div>
           </Col>

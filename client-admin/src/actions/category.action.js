@@ -84,30 +84,25 @@ export const updateCategories = (form) => {
 export const deleteCategories = (ids) => {
   return async (dispatch) => {
     // dispatch action for requesting to add categories
-    //dispatch({ type: categoryConstants.ADD_NEW_CATEGORIES_REQ });
+    dispatch({ type: categoryConstants.DELETE_CATEGORIES_REQ });
     // API call of /category/create
     const res = await axios.post("/category/delete", {
-     payload: {ids}
+      payload: { ids },
     });
-    // If category is successfully added
+    // If category is successfully deleted
     if (res.status === 201) {
-      console.log(res);
-      return true;
-      
-      // dispatch({
-      //   type: categoryConstants.ADD_NEW_CATEGORIES_SUCCESS,
-      //   payload: { category: res.data.category }, // Pass the added category as payload to store
-      // });
+      dispatch({
+        type: categoryConstants.DELETE_CATEGORIES_SUCCESS,
+      });
+      dispatch(getAllCategory());
     } else {
-      console.log(res);
-      return false;
-      // // If there is a error to adding category
-      // dispatch({
-      //   type: categoryConstants.ADD_NEW_CATEGORIES_FAILURE,
-      //   payload: res.data.error, //Pass the error as payload
-      // });
+      // If there is a error to delete category
+      dispatch({
+        type: categoryConstants.DELETE_CATEGORIES_SUCCESS,
+        payload: res.data.error, //Pass the error as payload
+      });
     }
   };
 };
 
-export{getAllCategory}
+export { getAllCategory };
