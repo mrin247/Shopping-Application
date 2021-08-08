@@ -23,6 +23,7 @@ import {
 } from "react-icons/io5";
 import "react-checkbox-tree/lib/react-checkbox-tree.css";
 import UpdateCategoriesModal from "./components/updateCategoriesModal";
+import AddCategoryModal from "./components/addCategoriesModal";
 
 /**
  * @author
@@ -177,38 +178,7 @@ const Category = (props) => {
   // ! Function to Render update categories modal
 
   // ! Function to Render add categories modal
-  const renderAddCategoriesModal = () => {
-    return (
-      <Modal
-        show={show}
-        handleClose={handleClose}
-        modalTitle={"Add new Category"}
-      >
-        <Input
-          value={categoryName}
-          placeholder={"Category Name"}
-          onChange={(e) => setCategoryName(e.target.value)}
-        />
-        <select
-          className="form-control"
-          value={parentCategoryId}
-          onChange={(e) => setParentcategoryId(e.target.value)}
-        >
-          <option>select category</option>
-          {createCategoryList(category.categories).map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.name}
-            </option>
-          ))}
-        </select>
-        <input
-          type="file"
-          name="categoryImage"
-          onChange={handlecategoryImage}
-        />
-      </Modal>
-    );
-  };
+
   // ! Function to delete Categpries
   const deleteCategoriesOnClick = () => {
     const checkedIdsArray = checkedArray.map((item, index) => ({
@@ -308,7 +278,17 @@ const Category = (props) => {
         </Row>
       </Container>
       {/* // ! Add category modal */}
-      {renderAddCategoriesModal()}
+      <AddCategoryModal
+                show={show}
+                handleClose={handleClose}
+                modalTitle={'Add New Category'}
+                categoryName={categoryName}
+                setCategoryName={setCategoryName}
+                parentCategoryId={parentCategoryId}
+                setParentCategoryId={setParentcategoryId}
+                categoryList={categoryList}
+                handleCategoryImage={setCategoryImage}
+            />
       {/* // ! Edit category modal */}
       <UpdateCategoriesModal
         show={updateCategoryModal}
