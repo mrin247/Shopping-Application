@@ -13,6 +13,7 @@ import {
 import Layout from "../../compoents/Layout";
 import Input from "../../compoents/UI/Input";
 import Modal from "../../compoents/UI/Modal";
+import "./style.css";
 
 // ! Import Icons
 import {
@@ -20,6 +21,9 @@ import {
   IoCheckbox,
   IoChevronDownCircleSharp,
   IoChevronForwardCircleSharp,
+  IoBagAddOutline,
+  IoTrash,
+  IoCloudUpload,
 } from "react-icons/io5";
 import "react-checkbox-tree/lib/react-checkbox-tree.css";
 import UpdateCategoriesModal from "./components/updateCategoriesModal";
@@ -52,6 +56,10 @@ const Category = (props) => {
   // ! Dispatch action to add category after modal close
   const handleClose = () => {
     const form = new FormData();
+    // if (categoryName === "") {
+    //   alert("Name is required");
+    //   return;
+    // }
     form.append("name", categoryName);
     form.append("parentId", parentCategoryId);
     form.append("categoryImage", categoryImage);
@@ -175,9 +183,9 @@ const Category = (props) => {
     setUpdateCategoryModal(false);
   };
 
-  // ! Function to Render update categories modal
 
-  // ! Function to Render add categories modal
+
+
 
   // ! Function to delete Categpries
   const deleteCategoriesOnClick = () => {
@@ -248,7 +256,12 @@ const Category = (props) => {
           <Col md={12}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <h3>Category</h3>
-              <button onClick={handleShow}>Add</button>
+              <div className="actionBtnContainer">
+                
+                <button onClick={handleShow}><IoBagAddOutline/><span> Add</span></button>
+                <button onClick={deleteCategory}><IoTrash/><span> Delete</span></button>
+                <button onClick={updateCategory}><IoCloudUpload/><span> Edit</span></button>
+              </div>
             </div>
           </Col>
         </Row>
@@ -270,25 +283,19 @@ const Category = (props) => {
             />
           </Col>
         </Row>
-        <Row>
-          <Col>
-            <button onClick={deleteCategory}>Delete</button>
-            <button onClick={updateCategory}>Edit</button>
-          </Col>
-        </Row>
       </Container>
       {/* // ! Add category modal */}
       <AddCategoryModal
-                show={show}
-                handleClose={handleClose}
-                modalTitle={'Add New Category'}
-                categoryName={categoryName}
-                setCategoryName={setCategoryName}
-                parentCategoryId={parentCategoryId}
-                setParentCategoryId={setParentcategoryId}
-                categoryList={categoryList}
-                handleCategoryImage={setCategoryImage}
-            />
+        show={show}
+        handleClose={handleClose}
+        modalTitle={"Add New Category"}
+        categoryName={categoryName}
+        setCategoryName={setCategoryName}
+        parentCategoryId={parentCategoryId}
+        setParentCategoryId={setParentcategoryId}
+        categoryList={categoryList}
+        handleCategoryImage={setCategoryImage}
+      />
       {/* // ! Edit category modal */}
       <UpdateCategoriesModal
         show={updateCategoryModal}
