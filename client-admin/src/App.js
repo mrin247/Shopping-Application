@@ -10,6 +10,7 @@ import Orders from './containers/Orders';
 import Products from './containers/Products';
 import Signin from './containers/Signin';
 import Signup from './containers/Signup';
+import NewPage from './containers/NewPage';
 
 
 function App() {
@@ -25,8 +26,10 @@ function App() {
     if (!auth.authenticate) {
       dispatch(isUserLoggedIn()); // ! Dispatch isUserLoggedIn action to store the token and the user
     }
-    dispatch(getInitialdata()); // ! Dispatch initialData action to fetch all categories & Product initially  from API
-  }, []);
+    if(auth.authenticate){
+      dispatch(getInitialdata()); // ! Dispatch initialData action to fetch all categories & Product initially  from API
+
+    }  }, [auth.authenticate]);
 
   // ! Render React App 
   return (
@@ -35,6 +38,7 @@ function App() {
         <Switch>
           <PrivateRoute path="/" exact component={Home}/>
           <PrivateRoute path="/category" component={Category}/>
+          <PrivateRoute path="/page" component={NewPage}/>
           <PrivateRoute path="/products" component={Products}/>
           <PrivateRoute path="/orders" component={Orders}/>
           <Route path="/signin" component={Signin}/>

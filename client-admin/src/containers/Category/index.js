@@ -53,13 +53,20 @@ const Category = (props) => {
   // ! Returns a refernce to the store.dispatch() method
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (!category.loading) {
+      setShow(false);
+    }
+  }, [category.loading]);
+
   // ! Dispatch action to add category after modal close
   const handleClose = () => {
     const form = new FormData();
-    // if (categoryName === "") {
-    //   alert("Name is required");
-    //   return;
-    // }
+
+    if (categoryName === "") {
+      alert("Name is required");
+      return;
+    }
     form.append("name", categoryName);
     form.append("parentId", parentCategoryId);
     form.append("categoryImage", categoryImage);
@@ -284,7 +291,8 @@ const Category = (props) => {
       {/* // ! Add category modal */}
       <AddCategoryModal
         show={show}
-        handleClose={handleClose}
+        handleClose={() => setShow(false)}
+        onSubmit={handleClose}
         modalTitle={"Add New Category"}
         categoryName={categoryName}
         setCategoryName={setCategoryName}
@@ -296,7 +304,8 @@ const Category = (props) => {
       {/* // ! Edit category modal */}
       <UpdateCategoriesModal
         show={updateCategoryModal}
-        handleClose={updateCategoriesForm}
+        handleClose={()=>setUpdateCategoryModal(false)}
+        onSubmit={updateCategoriesForm}
         modalTitle={"Update Categories"}
         size="lg"
         expandedArray={expandedArray}

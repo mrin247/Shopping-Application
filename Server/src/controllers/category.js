@@ -68,7 +68,6 @@ exports.postCreateCategory = (req, res) => {
     slug,
     categoryImage: categoryUrl,
     parentId,
-    type,
   });
 
   // Save Category

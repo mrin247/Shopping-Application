@@ -3,7 +3,7 @@ const express = require("express");
 const { check } = require("express-validator");
 
 // ! Import middlewares
-const { requireSignin, upload } = require("../../utill/middleware");
+const { requireSignin, upload, adminMiddleware } = require("../../utill/middleware");
 
 //  ! Set Router Module
 const router = express.Router();
@@ -27,7 +27,7 @@ const { createPage } = require("../../controllers/admin/page");
 //  ! GET Routes
 
 //  ! POST Routes
-router.post("/page/create", upload.fields([
+router.post("/page/create",requireSignin, adminMiddleware ,upload.fields([
     {name: 'banners'},
     {name: 'products'}
 ]),createPage);

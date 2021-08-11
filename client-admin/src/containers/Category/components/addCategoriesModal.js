@@ -3,7 +3,7 @@ import Input from "../../../compoents/UI/Input";
 import Modal from "../../../compoents/UI/Modal";
 import { Row, Col } from "react-bootstrap";
 
- // ! Function to Render add categories modal
+// ! Function to Render add categories modal
 const AddCategoryModal = (props) => {
   const {
     show,
@@ -15,10 +15,16 @@ const AddCategoryModal = (props) => {
     setParentCategoryId,
     categoryList,
     handleCategoryImage,
+    onSubmit,
   } = props;
 
   return (
-    <Modal show={show} handleClose={handleClose} modalTitle={modalTitle}>
+    <Modal
+      show={show}
+      handleClose={handleClose}
+      onSubmit={onSubmit}
+      modalTitle={modalTitle}
+    >
       <Row>
         <Col>
           <Input
