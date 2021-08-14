@@ -1,75 +1,35 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getProductsBySlug } from "../../actions";
+import React from "react";
 import Layout from "../../components/Layout";
-import { generatePublicUrl } from "../../urlConfig";
+import getParams from "../../utils/getParams";
+import ProductPage from "./ProductPage";
+import ProductStore from "./ProductStore";
 import "./style.css";
 
 /**
  * @author
- * @function ProductList
+ * @function ProductListPage
  **/
 
-const ProductList = (props) => {
-  // ! State
-  const [priceRange, setPriceRange] = useState({
-    under5k: 5000,
-    under10k: 10000,
-    under15k: 15000,
-    under20k: 20000,
-    under25k: 25000,
-    under30k: 30000,
-  });
+const ProductListPage = (props) => {
+  const renderProduct = () => {
+    console.log(props);
+    const params = getParams(props.location.search);
+    let content = null;
+    switch (params.type) {
+      case "store":
+        content = <ProductStore {...props} />;
+        break;
+      case "page":
+        content = <ProductPage {...props} />;
+        break;
+      default:
+        content = null;
+    }
 
-  // ! Extract category data from store
-  const product = useSelector((state) => state.product);
+    return content;
+  };
 
-  // ! Returns a refernce to the store.dispatch() method
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const { match } = props;
-    dispatch(getProductsBySlug(match.params.slug));
-  }, []);
-
-  // ! render product list
-  return (
-    <Layout>
-      {Object.keys(product.productsByPrice).map((key, index) => { // search for product key under productsByPrice object ank get in key
-        return (
-          <div className="card">
-            <div className="cardHeader">
-              <div>
-                {props.match.params.slug} mobile under {priceRange[key]}
-              </div>
-              <button>view all</button>
-            </div>
-
-            <div style={{ display: "flex" }}>
-              {product.productsByPrice[key].map((product) => ( // Use key to find product
-                <div className="productContainer">
-                  <div className="productImageContainer">
-                    <img
-                      src={generatePublicUrl(product.productPhotos[0].img)}
-                      alt=""
-                    />
-                  </div>
-                  <div className="productInfo">
-                    <div style={{ margin: "5px 0" }}>{product.name}</div>
-                    <div>
-                      <span>4.3</span>&nbsp;
-                      <span>3356</span>
-                    </div>
-                    <div className="productPrice">{product.price}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      })}
-    </Layout>
-  );
+  return <Layout>{renderProduct()}</Layout>;
 };
 
-export default ProductList;
+export default ProductListPage;

@@ -53,13 +53,20 @@ const Category = (props) => {
   // ! Returns a refernce to the store.dispatch() method
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (!category.loading) {
+      setShow(false);
+    }
+  }, [category.loading]);
+
   // ! Dispatch action to add category after modal close
   const handleClose = () => {
     const form = new FormData();
-    // if (categoryName === "") {
-    //   alert("Name is required");
-    //   return;
-    // }
+
+    if (categoryName === "") {
+      alert("Name is required");
+      return;
+    }
     form.append("name", categoryName);
     form.append("parentId", parentCategoryId);
     form.append("categoryImage", categoryImage);
@@ -102,6 +109,7 @@ const Category = (props) => {
         value: category._id,
         name: category.name,
         parentId: category.parentId,
+        type: category.type,
       });
       if (category.children.length > 0) {
         createCategoryList(category.children, options);
@@ -179,10 +187,6 @@ const Category = (props) => {
     setUpdateCategoryModal(false);
   };
 
-
-
-
-
   // ! Function to delete Categpries
   const deleteCategoriesOnClick = () => {
     const checkedIdsArray = checkedArray.map((item, index) => ({
@@ -194,12 +198,8 @@ const Category = (props) => {
 
     const idsArray = expandedIdsArray.concat(checkedIdsArray);
     if (checkedIdsArray.length > 0) {
-      dispatch(deleteCategories(checkedIdsArray)).then((result) => {
-        if (result) {
-          dispatch(getAllCategory());
-          setDeleteCategoryModal(false);
-        }
-      });
+      dispatch(deleteCategories(checkedIdsArray));
+      setDeleteCategoryModal(false);
     }
   };
 
@@ -253,10 +253,18 @@ const Category = (props) => {
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <h3>Category</h3>
               <div className="actionBtnContainer">
-                
-                <button onClick={handleShow}><IoBagAddOutline/><span> Add</span></button>
-                <button onClick={deleteCategory}><IoTrash/><span> Delete</span></button>
-                <button onClick={updateCategory}><IoCloudUpload/><span> Edit</span></button>
+                <button onClick={handleShow}>
+                  <IoBagAddOutline />
+                  <span> Add</span>
+                </button>
+                <button onClick={deleteCategory}>
+                  <IoTrash />
+                  <span> Delete</span>
+                </button>
+                <button onClick={updateCategory}>
+                  <IoCloudUpload />
+                  <span> Edit</span>
+                </button>
               </div>
             </div>
           </Col>
@@ -283,7 +291,8 @@ const Category = (props) => {
       {/* // ! Add category modal */}
       <AddCategoryModal
         show={show}
-        handleClose={handleClose}
+        handleClose={() => setShow(false)}
+        onSubmit={handleClose}
         modalTitle={"Add New Category"}
         categoryName={categoryName}
         setCategoryName={setCategoryName}
@@ -295,7 +304,8 @@ const Category = (props) => {
       {/* // ! Edit category modal */}
       <UpdateCategoriesModal
         show={updateCategoryModal}
-        handleClose={updateCategoriesForm}
+        handleClose={()=>setUpdateCategoryModal(false)}
+        onSubmit={updateCategoriesForm}
         modalTitle={"Update Categories"}
         size="lg"
         expandedArray={expandedArray}

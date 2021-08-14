@@ -18,6 +18,7 @@ function childrenCategories(categories, parentId = null) {
       name: cats.name,
       slug: cats.slug,
       parentId: cats.parentId,
+      type: cats.type,
       children: childrenCategories(categories, cats._id),
     });
   }

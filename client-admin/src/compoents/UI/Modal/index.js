@@ -1,12 +1,12 @@
 import React from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 
 /**
  * @author
  * @function Modal
  **/
 
-const newModal = (props) => {
+const NewModal = (props) => {
   return (
     <Modal size={props.size} show={props.show} onHide={props.handleClose}>
       <Modal.Header closeButton>
@@ -24,9 +24,9 @@ const newModal = (props) => {
           <Button
             variant="primary"
             {...props}
-            style={{backgroundColor: "#333"}}
+            style={{ backgroundColor: "#333" }}
             className="btn-sm"
-            onClick={props.handleClose}
+            onClick={props.onSubmit}
           >
             Save
           </Button>
@@ -36,4 +36,4 @@ const newModal = (props) => {
   );
 };
 
-export default newModal;
+export default NewModal;

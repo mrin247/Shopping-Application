@@ -12,3 +12,6 @@ export * from "./initial.action"
 
 // ! Export all from product.action action
 export * from "./product.action"
+
+// ! Export all from product.action action
+export * from "./page.actions"
