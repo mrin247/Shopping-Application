@@ -1,42 +1,23 @@
 // ! Import Dependencies
 const express = require("express");
-const { check } = require("express-validator");
 
 // ! Import middlewares
 const { requireSignin, upload, adminMiddleware } = require("../../utill/middleware");
 
+// ! Import controllers
+const { createPage, getPage } = require("../../controllers/admin/page");
+
 //  ! Set Router Module
 const router = express.Router();
 
-// ! Import Controllers for authentication from admin/auth
-const {
-  postSignin,
-  postSignup,
-  postSignout,
-} = require("../../controllers/admin/auth");
-
-// ! Import Controllers for validation from validators/auth
-const {
-  isValidatedReq,
-  validateSignupReq,
-  validateSigninReq,
-} = require("../../validators/auth");
-
-const { createPage } = require("../../controllers/admin/page");
-
 //  ! GET Routes
+router.get(`/page/:category/:type`,getPage);
 
 //  ! POST Routes
 router.post("/page/create",requireSignin, adminMiddleware ,upload.fields([
     {name: 'banners'},
     {name: 'products'}
 ]),createPage);
-
-// router.post("/profile",requireSignin, (req,res)=>{
-//     res.status(200).json({
-//         user: "profile"
-//     });
-// });
 
 //  ! Export router module
 module.exports = router;
