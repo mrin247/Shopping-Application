@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {useDispatch} from 'react-redux';
 import "./style.css";
 import flipkartLogo from "../../images/logo/flipkart.png";
 import goldenStar from "../../images/logo/golden-star.png";
@@ -9,6 +10,7 @@ import {
   MaterialButton,
   DropdownMenu,
 } from "../MaterialUI";
+import {login} from "../../actions";
 
 /**
  * @author
@@ -19,6 +21,11 @@ const Header = (props) => {
   const [loginModal, setLoginModal] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch =useDispatch();
+
+  const userLogin = () => {
+    dispatch(login({email,password}))
+  };
 
   return (
     <div className="header">
@@ -49,8 +56,9 @@ const Header = (props) => {
                 bgColor="#fb641b"
                 textColor="#ffffff"
                 style={{
-                  margin: '40px 0 20px 0'
+                  margin: "40px 0 20px 0",
                 }}
+                onClick={userLogin}
               />
               <p>OR</p>
               <MaterialButton
@@ -58,7 +66,7 @@ const Header = (props) => {
                 bgColor="#ffffff"
                 textColor="#2874f0"
                 style={{
-                  margin: '20px 0'
+                  margin: "20px 0",
                 }}
               />
             </div>

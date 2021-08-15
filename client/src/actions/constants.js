@@ -1,4 +1,14 @@
 
+// ! Export Constants for Authenticated related Actions
+export const authConstants = {
+  LOGIN_REQUEST: "LOGIN_REQUEST",
+  LOGIN_FAILURE: "LOGIN_FAILURE",
+  LOGIN_SUCCESS: "LOGIN_SUCCESS",
+  LOGOUT_REQUEST: "LOGOUT_REQUEST",
+  LOGOUT_SUCCESS: "LOGOUT_SUCCESS",
+  LOGOUT_FAILURE: "LOGOUT_FAILURE",
+};
+
 // ! Export Constants for category related Actons
 export const categoryConstants = {
   GET_ALL_CATEGORIES_REQ: "GET_ALL_CATEGORIES_REQ",

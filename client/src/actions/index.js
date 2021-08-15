@@ -1,4 +1,7 @@
 
+// ! Export all form auth.actions
+export * from "./auth.action";
+
 // ! Export all from category.actions
 export * from "./category.action"
 
