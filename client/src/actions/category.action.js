@@ -1,35 +1,27 @@
-// ! Import Constants
 import axios from "../helpers/axios";
-import { categoryConstants } from "./constants";
+import { categoryConstansts } from "./constants";
 
-// ! This action connects category route with /category/getCategory and shows category list on the client side
 export const getAllCategory = () => {
-  // dispatch actions to change the store's data
-  return async (dispatch) => {
-    // dispatch action for requesting to show categories
-    dispatch({ type: categoryConstants.GET_ALL_CATEGORIES_REQ });
+    return async dispatch => {
 
-    // API call of /category/getCategory
-    const res = await axios.get("/category/getCategory", {});
-    console.log(res);
+        dispatch({ type: categoryConstansts.GET_ALL_CATEGORIES_REQUEST });
+        const res = await axios.get(`category/getcategory`);
+        console.log(res);
+        if(res.status === 200){
 
-    // If category is successfully fetched
-    if (res.status === 200) {
-      // Extract categoryList from response data
-      const { categoryList } = res.data;
-      dispatch({
-        type: categoryConstants.GET_ALL_CATEGORIES_SUCCESS,
-        // Pass the category list as payload to store
-        payload: {
-          categories: categoryList,
-        },
-      });
-    } else {
-      // If there is a error to fetching categories
-      dispatch({
-        type: categoryConstants.GET_ALL_CATEGORIES_FAILURE,
-        payload: { error: res.data.error }, //Pass the error as payload
-      });
+            const { categoryList } = res.data;
+
+            dispatch({
+                type: categoryConstansts.GET_ALL_CATEGORIES_SUCCESS,
+                payload: { categories: categoryList }
+            });
+        }else{
+            dispatch({
+                type: categoryConstansts.GET_ALL_CATEGORIES_FAILURE,
+                payload: { error: res.data.error }
+            });
+        }
+
+
     }
-  };
-};
+}

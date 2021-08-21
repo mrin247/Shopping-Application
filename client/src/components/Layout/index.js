@@ -1,6 +1,6 @@
-import React from 'react'
-import Header from '../Header'
-import MenuHeader from '../MenuHeader'
+import React from 'react';
+import Header from '../Header';
+import MenuHeader from '../MenuHeader';
 
 /**
 * @author
@@ -10,9 +10,9 @@ import MenuHeader from '../MenuHeader'
 const Layout = (props) => {
   return(
     <>
-    <Header/>
-    <MenuHeader/>
-    {props.children}
+        <Header />
+        <MenuHeader />
+        {props.children}
     </>
    )
 

@@ -11,7 +11,7 @@ import MenuHeader from '../../components/MenuHeader'
 const HomePage = (props) => {
   return(
     <Layout>
-      Home page
+      Home Page
     </Layout>
    )
 

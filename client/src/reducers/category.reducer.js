@@ -1,115 +1,86 @@
-// ! disable es-lint
-/* eslint-disable eqeqeq */
-/* eslint-disable default-case */
-/* eslint-disable import/no-anonymous-default-export */
+import { categoryConstansts } from "../actions/constants";
 
-// ! import Action Constants for authentication
-import { categoryConstants } from "../actions/constants";
-
-// ! Initital state of the store
 const initState = {
-  categories: [],
-  error: null,
-  loading: false,
+    categories: [],
+    loading: false,
+    error: null
 };
 
-// ! Function to build new nested categories
+
 const buildNewCategories = (parentId, categories, category) => {
-  let myCategories = [];
+    let myCategories = [];
 
-  if (parentId == undefined) {
-    return [
-      ...categories,
-      {
-        _id: category._id,
-        name: category.name,
-        slug: category.slug,
-        children: [],
-      },
-    ];
-  }
-  for (let cat of categories) {
-    if (cat._id === parentId) {
-      // Create new category object
-      const newCategory = {
-        _id: category._id,
-        name: category.name,
-        slug: category.slug,
-        parentId: category.parentId,
-        children: category.children,
-      };
-      myCategories.push({
-        ...cat,
-        children:
-          cat.children
-            ? buildNewCategories(
-                parentId,
-                [...cat.children, newCategory],
-                category
-              )
-            : [],
-      });
-    } else {
-      myCategories.push({
-        ...cat,
-        children: cat.children
-          ? buildNewCategories(parentId, cat.children, category)
-          : [],
-      });
+    if(parentId == undefined){
+        return [
+            ...categories,
+            {
+                _id: category._id,
+                name: category.name,
+                slug: category.slug,
+                children: []
+            }
+        ];
     }
-  }
+    
+    for(let cat of categories){
 
-  return myCategories;
-};
+        if(cat._id == parentId){
+            myCategories.push({
+                ...cat,
+                children: cat.children ? buildNewCategories(parentId, [...cat.children, {
+                    _id: category._id,
+                    name: category.name,
+                    slug: category.slug,
+                    parentId: category.parentId,
+                    children: category.children
+                }], category) : []
+            });
+        }else{
+            myCategories.push({
+                ...cat,
+                children: cat.children ? buildNewCategories(parentId, cat.children, category) : []
+            });
+        }
 
-// ! Default export reducers for category
+        
+    }
+
+
+    return myCategories;
+}
+
+
 export default (state = initState, action) => {
-  console.log(action);
-  switch (action.type) {
-    case categoryConstants.GET_ALL_CATEGORIES_REQ:
-      state = {
-        // update state
-        ...state,
-        loading: true,
-      };
-      break;
-    case categoryConstants.GET_ALL_CATEGORIES_SUCCESS:
-      state = {
-        ...state,
-        categories: action.payload.categories,
-        loading: false,
-      };
-      break;
-    case categoryConstants.GET_ALL_CATEGORIES_FAILURE:
-      state = {
-        error: action.payload.error,
-      };
-      break;
-    case categoryConstants.ADD_NEW_CATEGORIES_REQ:
-      state = {
-        ...state,
-        loading: true,
-      };
-      break;
-    case categoryConstants.ADD_NEW_CATEGORIES_SUCCESS:
-      const category = action.payload.category;
-      const updatedCategories = buildNewCategories(
-        category.parentId,
-        state.categories,
-        category
-      );
-      state = {
-        ...state,
-        categories: updatedCategories,
-        loading: false,
-      };
-      break;
-    case categoryConstants.ADD_NEW_CATEGORIES_FAILURE:
-      state = {
-        ...initState,
-      };
-      break;
-  }
+    switch(action.type){
+        case categoryConstansts.GET_ALL_CATEGORIES_SUCCESS:
+            state = {
+                ...state,
+                categories: action.payload.categories
+            }
+            break;
+        case categoryConstansts.ADD_NEW_CATEGORY_REQUEST:
+            state = {
+                ...state,
+                loading: true
+            }
+            break;
+        case categoryConstansts.ADD_NEW_CATEGORY_SUCCESS:
+            const category = action.payload.category;
+            const updatedCategories = buildNewCategories(category.parentId, state.categories, category);
+            console.log('updated categoires', updatedCategories);
+            
+            state = {
+                ...state,
+                categories: updatedCategories,
+                loading: false,
+            }
+            break;
+        case categoryConstansts.ADD_NEW_CATEGORY_FAILURE:
+            state = {
+                ...initState
+            }
+            break;
+    }
 
-  return state;
-};
+    return state;
+}
