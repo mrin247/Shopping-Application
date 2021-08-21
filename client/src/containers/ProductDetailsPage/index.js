@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getProductDetailsById } from '../../actions';
+import { addToCart, getProductDetailsById } from '../../actions';
 import Layout from '../../components/Layout';
 import { 
   IoIosArrowForward, 
@@ -66,7 +66,7 @@ const ProductDetailsPage = (props) => {
 
             {/* action buttons */}
             <div className="flexRow">
-              <MaterialButton
+            <MaterialButton
                 title="ADD TO CART"
                 bgColor="#ff9f00"
                 textColor="#ffffff"
@@ -74,6 +74,12 @@ const ProductDetailsPage = (props) => {
                   marginRight: '5px'
                 }}
                 icon={<IoMdCart />}
+                onClick={() => {
+                  const { _id, name, price } = product.productDetails;
+                  const img = product.productDetails.productPhotos[0].img;
+                  dispatch(addToCart({ _id, name, price, img }));
+                  props.history.push(`/cart`);
+                }}
               />
               <MaterialButton
                 title="BUY NOW"
