@@ -1,42 +1,26 @@
-// ! Import Dependencies
-const express = require("express");
-const slugify = require("slugify");
-const multer = require("multer");
-const shortid = require("shortid");
+const express = require('express');
+//const {  } = require('../controller/category');
+const { requireSignin, adminMiddleware } = require('../utill/middleware');
+const {  getProductsBySlug, getProductDetailsById, postCreateProduct } = require('../controllers/product');
+const multer = require('multer');
+const router = express.Router();
+const shortid = require('shortid');
 const path = require('path');
 
-// ! Import Model
-const { postCreateProduct, getProductsBySlug } = require("../controllers/product");
-
-// ! Import Middlewares
-const { requireSignin, adminMiddleware } = require("../utill/middleware");
-
-//  ! Use Dependencies
-//  Set Router Module
-const router = express.Router();
-
-//  For file upload
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(path.dirname(__dirname), "uploads"));
-  },
-  filename: function (req, file, cb) {
-    cb(null, shortid.generate() + "-" + file.originalname);
-  },
-});
-const upload = multer({ storage: storage });
+    destination: function (req, file, cb) {
+      cb(null, path.join(path.dirname(__dirname), 'uploads'))
+    },
+    filename: function (req, file, cb) {
+      cb(null, shortid.generate() + '-' + file.originalname)
+    }
+})
 
-// ! GET Requests
-router.get('/product/:slug', getProductsBySlug);
+const upload = multer({ storage });
 
-// ! POST Requests
-router.post(
-  "/product/create",
-  requireSignin,
-  adminMiddleware,
-  upload.array("productPhotos"),
-  postCreateProduct
-);
+router.post('/product/create', requireSignin, adminMiddleware, upload.array('productPicture'), postCreateProduct);
+router.get('/products/:slug', getProductsBySlug)
+//router.get('/category/getcategory', getCategories);
+router.get('/product/:productId', getProductDetailsById);
 
-// ! Export Router
 module.exports = router;

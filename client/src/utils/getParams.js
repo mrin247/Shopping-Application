@@ -1,4 +1,3 @@
-/* eslint-disable import/no-anonymous-default-export */
 export default (query) => {
     if(query){
         const queryString = query.split("?")[1];
