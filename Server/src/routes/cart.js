@@ -1,22 +1,19 @@
-// ! Import Dependencies
-const express = require('express');
-const slugify = require('slugify');
-
-// ! Import Model
-const { postAddToCart } = require('../controllers/cart');
-
-
-// ! Import Middlewares
-const { requireSignin, userMiddleware } = require('../utill/middleware');
-
-//  ! Set Router Module
+const express = require("express");
+const {
+  addItemToCart,
+  addToCart,
+  getCartItems,
+} = require("../controllers/cart");
+const { requireSignin, userMiddleware } = require("../utill/middleware");
 const router = express.Router();
 
-// ! GET Requests
+router.post(
+  "/user/cart/addtocart",
+  requireSignin,
+  userMiddleware,
+  addItemToCart
+);
+//router.post('/user/cart/addToCartByLogin', requireSignin, userMiddleware, addToCart);
+router.post("/user/getCartItems", requireSignin, userMiddleware, getCartItems);
 
-
-// ! POST Requests
-router.post('/user/cart/add-to-cart', requireSignin, userMiddleware , postAddToCart);
-
-// ! Export Router
 module.exports = router;

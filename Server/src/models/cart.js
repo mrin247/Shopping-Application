@@ -1,34 +1,21 @@
-// ! Install Dependencies
 const mongoose = require("mongoose");
-const { Schema } = mongoose;
 
-//! Create cartSchema
-const cartSchema = new Schema(
+const cartSchema = new mongoose.Schema(
   {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     cartItems: [
       {
         product: {
           type: mongoose.Schema.Types.ObjectId,
-          required: true,
           ref: "Product",
-        },
-        quantity: {
-          type: Number,
-          default: 1,
-        },
-        price: {
-          type: Number,
           required: true,
         },
+        quantity: { type: Number, default: 1 },
+        //price: { type: Number, required: true }
       },
     ],
   },
   { timestamps: true }
 );
 
-// ! Exports cartSchema as Category
 module.exports = mongoose.model("Cart", cartSchema);
