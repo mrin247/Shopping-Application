@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addToCart, getProductDetailsById } from '../../actions';
+import { getProductDetailsById } from '../../actions';
 import Layout from '../../components/Layout';
 import { 
   IoIosArrowForward, 
@@ -12,6 +12,7 @@ import { AiFillThunderbolt } from 'react-icons/ai';
 import { MaterialButton } from '../../components/MaterialUI';
 import './style.css';
 import { generatePublicUrl } from '../../urlConfig';
+import { addToCart } from '../../actions';
 
 
 /**
@@ -35,6 +36,7 @@ const ProductDetailsPage = (props) => {
     dispatch(getProductDetailsById(payload));
   }, []);
 
+
   if(Object.keys(product.productDetails).length === 0){
     return null;
   }
@@ -54,7 +56,7 @@ const ProductDetailsPage = (props) => {
             }
             {/* <div className="thumbnail active">
               {
-                product.productDetails.productPhotos.map((thumb, index) => 
+                product.productDetails.productPictures.map((thumb, index) => 
                 <img src={generatePublicUrl(thumb.img)} alt={thumb.img} />)
               }
             </div> */}
@@ -66,7 +68,7 @@ const ProductDetailsPage = (props) => {
 
             {/* action buttons */}
             <div className="flexRow">
-            <MaterialButton
+              <MaterialButton
                 title="ADD TO CART"
                 bgColor="#ff9f00"
                 textColor="#ffffff"
