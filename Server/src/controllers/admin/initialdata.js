@@ -1,6 +1,7 @@
 // ! Import Models
 const Category = require("../../models/category");
 const Product = require("../../models/product");
+const Order=require("../../models/order")
 
 // ! Rcursive function for creating nested categories[Tree : O(nlogn)]
 function childrenCategories(categories, parentId = null) {
@@ -27,14 +28,17 @@ function childrenCategories(categories, parentId = null) {
 }
 
 // ! This controller send categories and products from "/initialdata" route
-exports.postInitialdata = async (req, res, next) => {
+
+exports.postInitialdata = async (req, res) => {
   const categories = await Category.find({}).exec();
   const products = await Product.find({})
     .select("_id name price quantity slug description productPhotos category")
-    .populate({path:"category", select:"_id name"})
+    .populate({ path: "category", select: "_id name" })
     .exec();
+  const orders = await Order.find({}).exec();
   res.status(200).json({
     categories: childrenCategories(categories),
     products,
+    orders,
   });
 };

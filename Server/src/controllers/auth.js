@@ -47,10 +47,11 @@ exports.postSignup = (req, res, next) => {
 
 // ! This controller handles signin request from "/signin" route
 exports.postSignin = (req, res, next) => {
-  User.findOne({ email: req.body.email }).exec((err, user) => {
+  User.findOne({ email: req.body.email }).exec(async (err, user) => {
     if (err) return res.status(400).json({ err });
     if (user) {
-      if (user.authenticate(req.body.password) && user.role === "user") {
+      const isPassword=await user.authenticate(req.body.password);
+      if (isPassword && user.role === "user") {
         const token = jwt.sign(
           { _id: user._id, role: user.role },
           process.env.JWT_TOKEN,
