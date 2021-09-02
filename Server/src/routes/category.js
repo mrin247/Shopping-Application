@@ -1,26 +1,20 @@
-// ! Import Dependencies
 const express = require("express");
-const slugify = require("slugify");
-const multer = require("multer");
-const shortid = require("shortid");
-const path = require("path");
-
-// ! Import Model
 const {
-  postCreateCategory,
+  addCategory,
   getCategories,
   updateCategories,
   deleteCategories,
-} = require("../controllers/category");
-
-// ! Import Middlewares
-const { requireSignin, adminMiddleware } = require("../utill/middleware");
-
-//  ! Use Dependencies
-//  Set Router Module
+} = require("../controller/category");
+const {
+  requireSignin,
+  adminMiddleware,
+  superAdminMiddleware,
+} = require("../common-middleware");
 const router = express.Router();
+const shortid = require("shortid");
+const path = require("path");
+const multer = require("multer");
 
-//  For file upload
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(path.dirname(__dirname), "uploads"));
@@ -30,32 +24,28 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage });
 
-// ! GET Requests
-router.get("/category/getCategory", getCategories);
-
-// ! POST Requests
 router.post(
   "/category/create",
   requireSignin,
-  adminMiddleware,
+  superAdminMiddleware,
   upload.single("categoryImage"),
-  postCreateCategory
+  addCategory
 );
-
+router.get("/category/getcategory", getCategories);
 router.post(
   "/category/update",
-
+  requireSignin,
+  superAdminMiddleware,
   upload.array("categoryImage"),
   updateCategories
 );
-
 router.post(
   "/category/delete",
-
+  requireSignin,
+  superAdminMiddleware,
   deleteCategories
 );
 
-// ! Export Router
 module.exports = router;

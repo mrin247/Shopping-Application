@@ -3,8 +3,9 @@ const {
   addItemToCart,
   addToCart,
   getCartItems,
-} = require("../controllers/cart");
-const { requireSignin, userMiddleware } = require("../utill/middleware");
+  removeCartItems,
+} = require("../controller/cart");
+const { requireSignin, userMiddleware } = require("../common-middleware");
 const router = express.Router();
 
 router.post(
@@ -15,5 +16,12 @@ router.post(
 );
 //router.post('/user/cart/addToCartByLogin', requireSignin, userMiddleware, addToCart);
 router.post("/user/getCartItems", requireSignin, userMiddleware, getCartItems);
+//new update
+router.post(
+  "/user/cart/removeItem",
+  requireSignin,
+  userMiddleware,
+  removeCartItems
+);
 
 module.exports = router;

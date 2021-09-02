@@ -1,7 +1,4 @@
-// ! Export base url
-export const API='http://localhost:3000/api'
-
-// ! Export function to show product photos
-export const generateProductPic=(fileName)=>{
+export const api = 'http://localhost:3000/api';
+export const generatePublicUrl = (fileName) => {
     return `http://localhost:3000/public/${fileName}`;
 }

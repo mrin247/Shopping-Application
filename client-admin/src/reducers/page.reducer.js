@@ -1,18 +1,11 @@
-// ! disable es-lint
-/* eslint-disable default-case */
-/* eslint-disable import/no-anonymous-default-export */
-
-// ! import page Constants for authentication
 import { pageConstants } from "../actions/constants"
 
-// ! Initital state of the store
 const initState = {
     error: null,
     loading: false,
     page: {}
 }
 
-// ! Default export reducers for page
 export default (state = initState, action) => {
     switch (action.type) {
         case pageConstants.CREATE_PAGE_REQUEST:

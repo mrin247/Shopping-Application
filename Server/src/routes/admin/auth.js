@@ -1,41 +1,13 @@
-// ! Import Dependencies
-const express = require("express");
-const { check } = require("express-validator");
-
-// ! Import middlewares
-const { requireSignin } = require("../../utill/middleware");
-
-//  ! Set Router Module
+const express = require('express');
+const { signup, signin, signout } = require('../../controller/admin/auth');
+const { validateSignupRequest, isRequestValidated, validateSigninRequest } = require('../../validators/auth');
+const { requireSignin } = require('../../common-middleware');
 const router = express.Router();
 
-// ! Import Controllers for authentication from admin/auth
-const {
-  postSignin,
-  postSignup,
-  postSignout,
-} = require("../../controllers/admin/auth");
 
-// ! Import Controllers for validation from validators/auth
-const {
-  isValidatedReq,
-  validateSignupReq,
-  validateSigninReq,
-} = require("../../validators/auth");
+router.post('/admin/signup', validateSignupRequest, isRequestValidated, signup);
+router.post('/admin/signin', validateSigninRequest, isRequestValidated, signin);
+router.post('/admin/signout', signout)
 
-//  ! GET Routes
 
-//  ! POST Routes
-router.post("/admin/signup", validateSignupReq, isValidatedReq, postSignup);
-
-router.post("/admin/signin", validateSigninReq, isValidatedReq, postSignin);
-
-router.post("/admin/signout", postSignout);
-
-// router.post("/profile",requireSignin, (req,res)=>{
-//     res.status(200).json({
-//         user: "profile"
-//     });
-// });
-
-//  ! Export router module
 module.exports = router;

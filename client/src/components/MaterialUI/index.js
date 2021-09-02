@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import "./style.css";
 
 /**
- * @author Rizwan Khan
- * @function
+ * @author 
+ * @function Modal
  **/
 
 const Modal = (props) => {
@@ -25,7 +25,8 @@ const Modal = (props) => {
 };
 
 const MaterialInput = (props) => {
-  const [focus, setFocus] = useState(false);
+  const [focus, setFocus] = useState(props.value === "" ? false : true);
+  const [touch, setTouch] = useState(false);
 
   return (
     <div className="materialInput">
@@ -36,7 +37,7 @@ const MaterialInput = (props) => {
           lineHeight: "none",
         }}
       >
-        {props.label}
+        {props.label && `Enter ${props.label}`}
       </label>
       <div
         style={{
@@ -50,15 +51,27 @@ const MaterialInput = (props) => {
           onChange={props.onChange}
           onFocus={(e) => {
             setFocus(true);
+            setTouch(true);
           }}
           onBlur={(e) => {
             if (e.target.value === "") {
               setFocus(false);
+            } else {
+              setTouch(false);
             }
           }}
         />
         {props.rightElement ? props.rightElement : null}
       </div>
+      {touch && (
+        <div
+          style={{
+            fontSize: "10px",
+            color: "red",
+            fontWeight: 500,
+          }}
+        >{`${props.label} is Required`}</div>
+      )}
     </div>
   );
 };
@@ -79,6 +92,7 @@ const MaterialButton = (props) => {
         style={{
           backgroundColor: props.bgColor,
           color: props.textColor,
+          fontSize: props.fontSize,
         }}
         onClick={onClick}
       >
@@ -94,24 +108,30 @@ const DropdownMenu = (props) => {
     <div className="headerDropdownContainer">
       {props.menu}
       <div className="dropdown">
-        <div className="upArrow"></div>
-        {props.firstMenu}
-        <ul className="headerDropdownMenu">
-          {props.menus &&
-            props.menus.map((item, index) => (
-              <li key={index}>
-                <a
-                  onClick={(e) => {
-                    e.preventDefault();
-                    item.onClick && item.onClick();
-                  }}
-                  href={item.href}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-        </ul>
+        <div className="upArrowContainer">
+          <div className="upArrow"></div>
+        </div>
+        <div className="dropdownMenu">
+          {props.firstMenu}
+          <ul className="headerDropdownMenu">
+            {props.menus &&
+              props.menus.map((item, index) => (
+                <li key={index}>
+                  <a
+                    onClick={(e) => {
+                      if (item.onClick) {
+                        e.preventDefault();
+                        item.onClick && item.onClick();
+                      }
+                    }}
+                    href={`${item.href}`}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
@@ -125,4 +145,20 @@ const Anchor = (props) => {
   );
 };
 
-export { Modal, MaterialInput, MaterialButton, DropdownMenu, Anchor };
+const Breed = (props) => {
+  return (
+    <div className="breed">
+      <ul>
+        {props.breed &&
+          props.breed.map((item, index) => (
+            <li key={index}>
+              <a href={item.href}>{item.name}</a>
+              {props.breedIcon}
+            </li>
+          ))}
+      </ul>
+    </div>
+  );
+};
+
+export { Modal, MaterialInput, MaterialButton, DropdownMenu, Anchor, Breed };

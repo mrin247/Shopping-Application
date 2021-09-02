@@ -1,76 +1,75 @@
-import React, { useEffect, useState } from "react";
-import Layout from "../../compoents/Layout";
-import { Container, Form, Row, Col, Button } from "react-bootstrap";
-import Input from "../../compoents/UI/Input";
-
-import { isUserLoggedIn, login } from "../../actions";
-import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import Layout from '../../components/Layout';
+import { Container, Form, Row, Col, Button } from 'react-bootstrap';
+import Input from '../../components/UI/Input';
+import { login } from '../../actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 /**
- * @author
- * @function Signin
- **/
+* @author
+* @function Signin
+**/
 
 const Signin = (props) => {
-  // Make state using useState hook
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState("");
 
-  // ! Extract authentication data from store
-  const auth = useSelector((state) => state.auth);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const auth = useSelector(state => state.auth);
 
-  // ! Returns a refernce to the store.dispatch() method
-  const dispatch = useDispatch(); 
+    const dispatch = useDispatch();
 
-  // ! user login function called on submitting form data
-  const userLogin = (e) => {
-    e.preventDefault();
-    const user = {
-      email,
-      password,
-    };
-    // ! Dispatch action to login user (user object passed as parameter)
-    dispatch(login(user));
-  };
+    
 
-  // ! Check if authenticated or not
-  if (auth.authenticate) {
-    return <Redirect to={"/"} />;
-  }
 
-  // ! Render singin form
-  return (
-    <Layout>
-      <Container>
-        <Row style={{ marginTop: "50px" }}>
-          <Col md={{ span: 6, offset: 3 }}>
-            <Form onSubmit={userLogin}>
-              <Input
-                label="Email"
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+    const userLogin = (e) => {
 
-              <Input
-                label="Password"
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <Button variant="primary" type="submit">
-                Submit
-              </Button>
-            </Form>
-          </Col>
-        </Row>
-      </Container>
-    </Layout>
-  );
-};
+        e.preventDefault();
 
-export default Signin;
+        const user = {
+            email, password
+        }
+
+        dispatch(login(user));
+    }
+
+    if(auth.authenticate){
+        return <Redirect to={`/`} />
+    }
+
+    return (
+        <Layout>
+            <Container>
+                <Row style={{ marginTop: '50px' }}>
+                    <Col md={{span: 6, offset: 3}}>
+                        <Form onSubmit={userLogin}>
+                            <Input 
+                                label="Email"
+                                placeholder="Email"
+                                value={email}
+                                type="email"
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+
+                            <Input 
+                                label="Password"
+                                placeholder="Password"
+                                value={password}
+                                type="password"
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                            <Button variant="primary" type="submit">
+                                Submit
+                            </Button>
+                        </Form>
+                    </Col>
+                </Row>
+                
+            </Container>
+        </Layout>
+    )
+
+}
+
+export default Signin
