@@ -1,5 +1,5 @@
-const { requireSignin, userMiddleware } = require("../utill/middleware");
-const { addOrder, getOrders, getOrder } = require("../controllers/order");
+const { requireSignin, userMiddleware } = require("../common-middleware");
+const { addOrder, getOrders, getOrder } = require("../controller/order");
 const router = require("express").Router();
 
 router.post("/addOrder", requireSignin, userMiddleware, addOrder);

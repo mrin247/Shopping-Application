@@ -1,23 +1,13 @@
-// ! Import Dependencies
-const express = require("express");
-
-// ! Import middlewares
-const { requireSignin, upload, adminMiddleware } = require("../../utill/middleware");
-
-// ! Import controllers
-const { createPage, getPage } = require("../../controllers/admin/page");
-
-//  ! Set Router Module
+const express = require('express');
+const { upload, requireSignin, adminMiddleware } = require('../../common-middleware');
+const { createPage, getPage } = require('../../controller/admin/page');
 const router = express.Router();
 
-//  ! GET Routes
-router.get(`/page/:category/:type`,getPage);
+router.post(`/page/create`, requireSignin, adminMiddleware, upload.fields([
+    { name: 'banners' },
+    { name: 'products' }
+]), createPage)
 
-//  ! POST Routes
-router.post("/page/create",requireSignin, adminMiddleware ,upload.fields([
-    {name: 'banners'},
-    {name: 'products'}
-]),createPage);
+router.get(`/page/:category/:type`, getPage);
 
-//  ! Export router module
 module.exports = router;

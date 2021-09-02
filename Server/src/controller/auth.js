@@ -1,23 +1,19 @@
-// ! Import Dependencies
+const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const shortId = require("shortid");
-// ! Import Models
-const User = require("../models/user");
+const shortid = require("shortid");
 
 const generateJwtToken = (_id, role) => {
-  return jwt.sign({ _id, role }, process.env.JWT_TOKEN, {
+  return jwt.sign({ _id, role }, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
 };
 
-// ! This controller handles signup request from "/signup" route
-exports.postSignup = (req, res, next) => {
-  //  Check if user email id is already registered or not
+exports.signup = (req, res) => {
   User.findOne({ email: req.body.email }).exec(async (error, user) => {
     if (user)
       return res.status(400).json({
-        message: "User already registered",
+        error: "User already registered",
       });
 
     const { firstName, lastName, email, password } = req.body;
@@ -27,7 +23,7 @@ exports.postSignup = (req, res, next) => {
       lastName,
       email,
       hash_password,
-      username: shortId.generate(),
+      username: shortid.generate(),
     });
 
     _user.save((error, user) => {
@@ -49,8 +45,7 @@ exports.postSignup = (req, res, next) => {
   });
 };
 
-// ! This controller handles signin request from "/signin" route
-exports.postSignin = (req, res, next) => {
+exports.signin = (req, res) => {
   User.findOne({ email: req.body.email }).exec(async (error, user) => {
     if (error) return res.status(400).json({ error });
     if (user) {

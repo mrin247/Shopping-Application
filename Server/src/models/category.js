@@ -1,9 +1,5 @@
-// ! Install Dependencies
 const mongoose = require("mongoose");
-const { Schema } = mongoose;
-
-//! Create categogrySchema
-const categorySchema = new Schema(
+const categorySchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -15,12 +11,20 @@ const categorySchema = new Schema(
       required: true,
       unique: true,
     },
-    type:{type:String},
+    type: {
+      type: String,
+    },
     categoryImage: { type: String },
-    parentId: { type: String },
+    parentId: {
+      type: String,
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
-// ! Exports categorySchema as Category
 module.exports = mongoose.model("Category", categorySchema);

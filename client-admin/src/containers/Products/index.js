@@ -19,7 +19,7 @@ const Products = (props) => {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("");
-  const [productPhotos, setProductPictures] = useState([]);
+  const [productPictures, setProductPictures] = useState([]);
   const [show, setShow] = useState(false);
   const [productDetailModal, setProductDetailModal] = useState(false);
   const [productDetails, setProductDetails] = useState(null);
@@ -39,8 +39,8 @@ const Products = (props) => {
     form.append("description", description);
     form.append("category", categoryId);
 
-    for (let pic of productPhotos) {
-      form.append("productPicture", pic);
+    for (let pic of productPictures) {
+      form.append("productPhotos", pic);
     }
 
     dispatch(addProduct(form)).then(() => setShow(false));
@@ -59,7 +59,7 @@ const Products = (props) => {
   };
 
   const handleProductPictures = (e) => {
-    setProductPictures([...productPhotos, e.target.files[0]]);
+    setProductPictures([...productPictures, e.target.files[0]]);
   };
 
   const renderProducts = () => {
@@ -151,14 +151,14 @@ const Products = (props) => {
             </option>
           ))}
         </select>
-        {productPhotos.length > 0
-          ? productPhotos.map((pic, index) => (
+        {productPictures.length > 0
+          ? productPictures.map((pic, index) => (
               <div key={index}>{pic.name}</div>
             ))
           : null}
         <input
           type="file"
-          name="productPicture"
+          name="productPictures"
           onChange={handleProductPictures}
         />
       </Modal>

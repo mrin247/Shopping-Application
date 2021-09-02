@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import "./style.css";
 
 /**
- * @author Rizwan Khan
- * @function
+ * @author 
+ * @function Modal
  **/
 
 const Modal = (props) => {
@@ -25,7 +25,7 @@ const Modal = (props) => {
 };
 
 const MaterialInput = (props) => {
-  const [focus, setFocus] = useState(false);
+  const [focus, setFocus] = useState(props.value === "" ? false : true);
   const [touch, setTouch] = useState(false);
 
   return (
@@ -108,26 +108,30 @@ const DropdownMenu = (props) => {
     <div className="headerDropdownContainer">
       {props.menu}
       <div className="dropdown">
-        <div className="upArrow"></div>
-        {props.firstMenu}
-        <ul className="headerDropdownMenu">
-          {props.menus &&
-            props.menus.map((item, index) => (
-              <li key={index}>
-                <a
-                  onClick={(e) => {
-                    if (item.onClick) {
-                      e.preventDefault();
-                      item.onClick && item.onClick();
-                    }
-                  }}
-                  href={`${item.href}`}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-        </ul>
+        <div className="upArrowContainer">
+          <div className="upArrow"></div>
+        </div>
+        <div className="dropdownMenu">
+          {props.firstMenu}
+          <ul className="headerDropdownMenu">
+            {props.menus &&
+              props.menus.map((item, index) => (
+                <li key={index}>
+                  <a
+                    onClick={(e) => {
+                      if (item.onClick) {
+                        e.preventDefault();
+                        item.onClick && item.onClick();
+                      }
+                    }}
+                    href={`${item.href}`}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
