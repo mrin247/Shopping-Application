@@ -1,16 +1,10 @@
-// ! Import libraries
-import { applyMiddleware, createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
+import { composeWithDevTools } from 'redux-devtools-extension';
+import rootReducer from '../reducers';
 import thunk from "redux-thunk";
-import { composeWithDevTools } from "redux-devtools-extension";
 
-// ! Import Reducer module
-import rootReducer from "../reducers";
+const store = createStore(rootReducer, composeWithDevTools(
+    applyMiddleware(thunk)
+));
 
-// ! Create Redux store
-const store = createStore(
-  rootReducer,
-  composeWithDevTools(applyMiddleware(thunk))
-);
-
-// ! Export store
 export default store;

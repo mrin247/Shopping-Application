@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductsBySlug } from "../../../actions";

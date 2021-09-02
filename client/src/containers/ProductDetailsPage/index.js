@@ -56,7 +56,7 @@ const ProductDetailsPage = (props) => {
             }
             {/* <div className="thumbnail active">
               {
-                product.productDetails.productPictures.map((thumb, index) => 
+                product.productDetails.productPhotos.map((thumb, index) => 
                 <img src={generatePublicUrl(thumb.img)} alt={thumb.img} />)
               }
             </div> */}

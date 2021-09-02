@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Modal from '../../compoents/UI/Modal';
-import Layout from '../../compoents/Layout';
-import Input from '../../compoents/UI/Input';
+import Modal from '../../components/UI/Modal';
+import Layout from '../../components/Layout';
+import Input from '../../components/UI/Input';
 import { Container, Row, Col } from 'react-bootstrap';
-import linearCategories from '../../helpers/createCategories';
+import linearCategories from '../../helpers/linearCategories';
 import { useSelector, useDispatch } from 'react-redux';
 import { createPage } from '../../actions';
 
@@ -194,11 +194,11 @@ const NewPage = (props) => {
                 page.loading ? 
                 <p>Creating Page...please wait</p>
                 :
-                <> 
+                <>
                     {renderCreatePageModal()}
                     <button onClick={() => setCreateModal(true)}>Create Page</button>
-                </>}
-            
+                </>
+            }
             
         </Layout>
     )

@@ -1,7 +1,7 @@
 const express = require('express');
 //const {  } = require('../controller/category');
 const { requireSignin, adminMiddleware } = require('../utill/middleware');
-const {  getProductsBySlug, getProductDetailsById, postCreateProduct } = require('../controllers/product');
+const {  getProductsBySlug, getProductDetailsById, postCreateProduct, deleteProductById, getProducts } = require('../controllers/product');
 const multer = require('multer');
 const router = express.Router();
 const shortid = require('shortid');
@@ -22,5 +22,18 @@ router.post('/product/create', requireSignin, adminMiddleware, upload.array('pro
 router.get('/products/:slug', getProductsBySlug)
 //router.get('/category/getcategory', getCategories);
 router.get('/product/:productId', getProductDetailsById);
+
+router.delete(
+  "/product/deleteProductById",
+  requireSignin,
+  adminMiddleware,
+  deleteProductById
+);
+router.post(
+  "/product/getProducts",
+  requireSignin,
+  adminMiddleware,
+  getProducts
+);
 
 module.exports = router;

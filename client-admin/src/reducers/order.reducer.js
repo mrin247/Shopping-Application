@@ -1,5 +1,3 @@
-/* eslint-disable default-case */
-/* eslint-disable import/no-anonymous-default-export */
 import { orderConstants } from "../actions/constants";
 
 const initState = {

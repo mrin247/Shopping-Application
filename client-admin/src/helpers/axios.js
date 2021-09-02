@@ -1,43 +1,35 @@
-// ! Import Axios
-import axios from "axios";
-import { authConstants } from "../actions/constants";
+import axios from 'axios';
+import { api } from '../urlConfig';
+import store from '../store';
+import { authConstants } from '../actions/constants';
 
-import store from "../store";
+const token = window.localStorage.getItem('token');
 
-// ! Import API
-import { API } from "../urlConfig";
-
-// ! Get authorization token
-const token = window.localStorage.getItem("token");
-
-// ! Create a instance or an single occurence of axios with custom config[object] for API calls from client
-const axiosInstance = axios.create({
-  baseURL: API,
-  headers: {
-    'Authorization': token ? `Bearer ${token}` : "",
-  },
+const axiosIntance = axios.create({
+    baseURL: api,
+    headers: {
+        'Authorization': token ? `Bearer ${token}` : ''
+    }
 });
 
-// ! intercept requests or responses before they are handled by actions and check is the token is valid or not
-axiosInstance.interceptors.request.use((req)=>{
-  const {auth}= store.getState();
-  if(auth.token){
-    req.headers.Authorization= `Bearer ${auth.token}`
-  }
-  return req;
-
+axiosIntance.interceptors.request.use((req) => {
+    const { auth } = store.getState();
+    if(auth.token){
+        req.headers.Authorization = `Bearer ${auth.token}`;
+    }
+    return req;
 })
 
-axiosInstance.interceptors.response.use((res)=>{
-  return res;
-},(err)=>{
-  console.log(err.response);
-  const {status}= err.response;
-  if(status===500){
-    localStorage.clear();
-    store.dispatch({type: authConstants.LOGOUT_SUCCESS});
-  }
-  return Promise.reject(err);
+axiosIntance.interceptors.response.use((res) => {
+    return res;
+}, (error) => {
+    console.log(error.response);
+    const status = error.response ? error.response.status : 500;
+    if(status && status === 500){
+        localStorage.clear();
+        store.dispatch({ type: authConstants.LOGOUT_SUCCESS });
+    }
+    return Promise.reject(error);
 })
-// ! export axiosInstance as default
-export default axiosInstance;
+
+export default axiosIntance;

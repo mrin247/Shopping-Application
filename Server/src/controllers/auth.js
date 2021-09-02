@@ -5,40 +5,44 @@ const shortId = require("shortid");
 // ! Import Models
 const User = require("../models/user");
 
+const generateJwtToken = (_id, role) => {
+  return jwt.sign({ _id, role }, process.env.JWT_TOKEN, {
+    expiresIn: "1d",
+  });
+};
+
 // ! This controller handles signup request from "/signup" route
 exports.postSignup = (req, res, next) => {
   //  Check if user email id is already registered or not
-  User.findOne({ email: req.body.email }).exec(async (err, user) => {
+  User.findOne({ email: req.body.email }).exec(async (error, user) => {
     if (user)
       return res.status(400).json({
-        message: "User is already registered",
+        message: "User already registered",
       });
-    // Destructure input from req body
+
     const { firstName, lastName, email, password } = req.body;
-
-    // Hash password
     const hash_password = await bcrypt.hash(password, 10);
-
-    // Create new user from Destructured body parameters
     const _user = new User({
       firstName,
       lastName,
       email,
       hash_password,
-      userName: shortId.generate(),
+      username: shortId.generate(),
     });
 
-    // Save User to DB
-    _user.save((err, data) => {
-      if (err)
+    _user.save((error, user) => {
+      if (error) {
         return res.status(400).json({
-          err: err,
           message: "Something went wrong",
         });
+      }
 
-      if (data) {
+      if (user) {
+        const token = generateJwtToken(user._id, user.role);
+        const { _id, firstName, lastName, email, role, fullName } = user;
         return res.status(201).json({
-          message: "user created successfully",
+          token,
+          user: { _id, firstName, lastName, email, role, fullName },
         });
       }
     });
@@ -47,32 +51,29 @@ exports.postSignup = (req, res, next) => {
 
 // ! This controller handles signin request from "/signin" route
 exports.postSignin = (req, res, next) => {
-  User.findOne({ email: req.body.email }).exec(async (err, user) => {
-    if (err) return res.status(400).json({ err });
+  User.findOne({ email: req.body.email }).exec(async (error, user) => {
+    if (error) return res.status(400).json({ error });
     if (user) {
-      const isPassword=await user.authenticate(req.body.password);
+      const isPassword = await user.authenticate(req.body.password);
       if (isPassword && user.role === "user") {
-        const token = jwt.sign(
-          { _id: user._id, role: user.role },
-          process.env.JWT_TOKEN,
-          {
-            expiresIn: "1d",
-          }
-        );
+        // const token = jwt.sign(
+        //   { _id: user._id, role: user.role },
+        //   process.env.JWT_SECRET,
+        //   { expiresIn: "1d" }
+        // );
+        const token = generateJwtToken(user._id, user.role);
         const { _id, firstName, lastName, email, role, fullName } = user;
         res.status(200).json({
           token,
           user: { _id, firstName, lastName, email, role, fullName },
         });
       } else {
-        res.status(400).json({
+        return res.status(400).json({
           message: "Something went wrong",
         });
       }
     } else {
-      return res.status(400).json({
-        message: "Something went wrong",
-      });
+      return res.status(400).json({ message: "Something went wrong" });
     }
   });
 };

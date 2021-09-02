@@ -1,11 +1,12 @@
-import React from "react";
-import { Form } from "react-bootstrap";
+import React from 'react';
+import { Form } from 'react-bootstrap';
 
 /**
- * @author
- * @function Input
- **/
- const Input = (props) => {
+* @author
+* @function Input
+**/
+
+const Input = (props) => {
 
   let input = null;
   switch(props.type){

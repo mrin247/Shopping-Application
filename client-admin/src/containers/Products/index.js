@@ -1,62 +1,52 @@
 import React, { useState } from "react";
-import Layout from "../../compoents/Layout";
-import { Col, Container, Row, Table } from "react-bootstrap";
-import Input from "../../compoents/UI/Input";
-import { useDispatch, useSelector } from "react-redux";
-import { addProduct } from "../../actions";
-import Modal from "../../compoents/UI/Modal";
-import "./styles.css";
-import {generateProductPic} from "../../urlConfig"
+import Layout from "../../components/Layout";
+import { Container, Row, Col, Table } from "react-bootstrap";
+import Input from "../../components/UI/Input";
+import Modal from "../../components/UI/Modal";
+import { useSelector, useDispatch } from "react-redux";
+import { addProduct, deleteProductById } from "../../actions";
+import { generatePublicUrl } from "../../urlConfig";
+import "./style.css";
+
 /**
  * @author
  * @function Products
  **/
 
 const Products = (props) => {
-  // ! State
-  const [show, setShow] = useState(false);
-  const [productDetailModal, setProductDetailModal] = useState(false);
-  const [productDetails, setProductDetails] = useState({});
-
   const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("");
-  const [productPhotos, setProductPhotos] = useState([]);
-
-  // ! Extract category & product data from store
-
+  const [productPhotos, setProductPictures] = useState([]);
+  const [show, setShow] = useState(false);
+  const [productDetailModal, setProductDetailModal] = useState(false);
+  const [productDetails, setProductDetails] = useState(null);
   const category = useSelector((state) => state.category);
   const product = useSelector((state) => state.product);
-
-  // ! Returns a refernce to the store.dispatch() method
   const dispatch = useDispatch();
 
-  // // ! Render every time
-  // useEffect(() => {
-  //   //dispatch(getAllCategory());
-  // }, []);
-
-  // ! Dispatch action to add product after modal close
   const handleClose = () => {
+    setShow(false);
+  };
+
+  const submitProductForm = () => {
     const form = new FormData();
     form.append("name", name);
-    form.append("price", price);
     form.append("quantity", quantity);
+    form.append("price", price);
     form.append("description", description);
     form.append("category", categoryId);
+
     for (let pic of productPhotos) {
-      form.append("productPhotos", pic);
+      form.append("productPicture", pic);
     }
 
-    dispatch(addProduct(form));
-
-    setShow(false);
+    dispatch(addProduct(form)).then(() => setShow(false));
   };
   const handleShow = () => setShow(true);
 
-  // ! This recursive function create category list linerly by maintaining and returning an array named options
   const createCategoryList = (categories, options = []) => {
     for (let category of categories) {
       options.push({ value: category._id, name: category.name });
@@ -64,44 +54,89 @@ const Products = (props) => {
         createCategoryList(category.children, options);
       }
     }
+
     return options;
   };
 
-  // act when image for new product photo added
-  const handleProductPhotos = (e) => {
-    setProductPhotos([...productPhotos, e.target.files[0]]);
+  const handleProductPictures = (e) => {
+    setProductPictures([...productPhotos, e.target.files[0]]);
   };
 
-  // ! Render Product Modal
+  const renderProducts = () => {
+    return (
+      <Table style={{ fontSize: 12 }} responsive="sm">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Category</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {product.products.length > 0
+            ? product.products.map((product) => (
+                <tr key={product._id}>
+                  <td>2</td>
+                  <td>{product.name}</td>
+                  <td>{product.price}</td>
+                  <td>{product.quantity}</td>
+                  <td>{product.category.name}</td>
+                  <td>
+                    <button onClick={() => showProductDetailsModal(product)}>
+                      info
+                    </button>
+                    <button
+                      onClick={() => {
+                        const payload = {
+                          productId: product._id,
+                        };
+                        dispatch(deleteProductById(payload));
+                      }}
+                    >
+                      del
+                    </button>
+                  </td>
+                </tr>
+              ))
+            : null}
+        </tbody>
+      </Table>
+    );
+  };
+
   const renderAddProductModal = () => {
     return (
       <Modal
         show={show}
         handleClose={handleClose}
-        modalTitle={"Add new Product"}
+        modalTitle={"Add New Product"}
+        onSubmit={submitProductForm}
       >
         <Input
           label="Name"
           value={name}
-          placeholder={"Product Name"}
+          placeholder={`Product Name`}
           onChange={(e) => setName(e.target.value)}
-        />
-        <Input
-          label="Price"
-          value={price}
-          placeholder={"Product Price"}
-          onChange={(e) => setPrice(e.target.value)}
         />
         <Input
           label="Quantity"
           value={quantity}
-          placeholder={"Product Quantity"}
+          placeholder={`Quantity`}
           onChange={(e) => setQuantity(e.target.value)}
+        />
+        <Input
+          label="Price"
+          value={price}
+          placeholder={`Price`}
+          onChange={(e) => setPrice(e.target.value)}
         />
         <Input
           label="Description"
           value={description}
-          placeholder={"Product Description"}
+          placeholder={`Description`}
           onChange={(e) => setDescription(e.target.value)}
         />
         <select
@@ -116,35 +151,39 @@ const Products = (props) => {
             </option>
           ))}
         </select>
-
         {productPhotos.length > 0
-          ? productPhotos.map((pic, index) => <div key={index}>{pic.name}</div>)
+          ? productPhotos.map((pic, index) => (
+              <div key={index}>{pic.name}</div>
+            ))
           : null}
-
         <input
           type="file"
-          name="productPhotos"
-          onChange={handleProductPhotos}
+          name="productPicture"
+          onChange={handleProductPictures}
         />
       </Modal>
     );
   };
 
-  // ! Show product details in product detail modal
-  const showProductDetailModal = (product) => {
+  const handleCloseProductDetailsModal = () => {
+    setProductDetailModal(false);
+  };
+
+  const showProductDetailsModal = (product) => {
     setProductDetails(product);
     setProductDetailModal(true);
   };
 
-  // ! Render Product detail modal
-  const renderProductDetailModal = () => {
-    console.log(productDetails.productPhotos);
-    if (!productDetails) return null;
+  const renderProductDetailsModal = () => {
+    if (!productDetails) {
+      return null;
+    }
+
     return (
       <Modal
         show={productDetailModal}
-        handleClose={() => setProductDetailModal(false)}
-        modalTitle={"Product Detail"}
+        handleClose={handleCloseProductDetailsModal}
+        modalTitle={"Product Details"}
         size="lg"
       >
         <Row>
@@ -152,7 +191,7 @@ const Products = (props) => {
             <label className="key">Name</label>
             <p className="value">{productDetails.name}</p>
           </Col>
-          <Col md={6}>
+          <Col md="6">
             <label className="key">Price</label>
             <p className="value">{productDetails.price}</p>
           </Col>
@@ -164,7 +203,7 @@ const Products = (props) => {
           </Col>
           <Col md="6">
             <label className="key">Category</label>
-            <p className="value">{productDetails.category && productDetails.category.name}</p>
+            <p className="value">{productDetails.category.name}</p>
           </Col>
         </Row>
         <Row>
@@ -173,64 +212,24 @@ const Products = (props) => {
             <p className="value">{productDetails.description}</p>
           </Col>
         </Row>
-
         <Row>
-          <Col >
+          <Col>
             <label className="key">Product Pictures</label>
             <div style={{ display: "flex" }}>
-              {productDetails.productPhotos &&
-                productDetails.productPhotos.map((pic) => (
-                  <div className="productImgContainer">
-                    <img
-                      src={generateProductPic(pic.img)}
-                      alt="product Photos"
-                    />
-                  </div>
-                ))}
+              {productDetails.productPhotos.map((picture) => (
+                <div className="productImgContainer">
+                  <img src={generatePublicUrl(picture.img)} />
+                </div>
+              ))}
             </div>
           </Col>
         </Row>
       </Modal>
     );
   };
-
-  // ! render Products Table
-  const renderProducts = () => {
-    return (
-      <Table style={{ fontSize: 12 }} responsive="sm">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>name</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Category</th>
-          </tr>
-        </thead>
-        <tbody>
-          {product.products.length > 0
-            ? product.products.map((product) => (
-                <tr
-                  key={product._id}
-                  onClick={() => showProductDetailModal(product)}
-                >
-                  <td>2</td>
-                  <td>{product.name}</td>
-                  <td>{product.price}</td>
-                  <td>{product.quantity}</td>
-                  <td>{product.category ? product.category.name : ""}</td>
-                </tr>
-              ))
-            : null}
-        </tbody>
-      </Table>
-    );
-  };
-
-  // ! Render Products
   return (
     <Layout sidebar>
-      <Container fluid>
+      <Container>
         <Row>
           <Col md={12}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -239,13 +238,12 @@ const Products = (props) => {
             </div>
           </Col>
         </Row>
-
         <Row>
           <Col>{renderProducts()}</Col>
         </Row>
       </Container>
       {renderAddProductModal()}
-      {renderProductDetailModal()}
+      {renderProductDetailsModal()}
     </Layout>
   );
 };
